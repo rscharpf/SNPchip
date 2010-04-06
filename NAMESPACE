@@ -1,0 +1,78 @@
+importClassesFrom(Biobase, AnnotatedDataFrame, AssayData, eSet,
+                  MIAME, Versioned, VersionedBiobase, Versions, SnpSet)
+
+importClassesFrom(methods, character, data.frame, list, matrix)
+
+importClassesFrom(oligoClasses, oligoSnpSet)
+
+importMethodsFrom(Biobase, 
+			   annotation, "annotation<-", assayData,
+			    "assayData<-", 
+			    experimentData, "experimentData<-",
+			    fData, 
+			    featureData, "featureData<-", 
+			    featureNames,
+			    pData, 
+			    phenoData, "phenoData<-", 
+			    pubMedIds,
+			    sampleNames, 
+			    storageMode, 
+			    updateObject)
+
+importMethodsFrom(methods, coerce, initialize, show)
+
+importMethodsFrom(oligoClasses, calls, confs, "calls<-", "confs<-",
+				 chromosome, cnConfidence, "cnConfidence<-",
+                                 copyNumber, "copyNumber<-",
+				 position)
+importFrom(oligoClasses, chromosome2integer)
+
+importFrom(Biobase, assayDataElement, assayDataElementNames,
+                   assayDataElementReplace, assayDataNew)
+
+importFrom(graphics, abline, axis, layout, legend, mtext, par, plot,
+                   polygon, rect, segments, text)
+
+importFrom(grDevices, grey)
+
+importFrom(methods, "@<-", callNextMethod, extends, new, validObject)
+
+importFrom(stats, loess, sd)
+
+importFrom(utils, packageDescription, read.table)
+
+
+exportClasses(ParESet,
+		       ParSnpCopyNumberSet,
+		       ParSnpCallSet,
+		       ParSnpSet)
+
+
+exportMethods(
+              coerce,
+             dbSnpId,
+              fragmentLength,
+              hmmPredict,
+              plot,
+             show,
+              smoothSnp,
+              summary,
+              updateObject,
+             snpset)
+
+export(centromere,
+      chromosomeSize,
+      integer2chromosome,
+      plotPredictions,
+       showSummary)
+
+exportMethods("initialize")
+##par class methods
+exportMethods("$",
+              "$<-",
+              plotSnp,
+              snpPar,
+              "snpPar<-")
+
+export(plotCytoband)
+

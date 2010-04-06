@@ -1,0 +1,13 @@
+citEntry(entry="Article",
+	author="Robert B. Scharpf and Giovanni Parmigiani and Jonathan
+	Pevsner and Ingo Ruczinski",
+	title="SNPchip: R classes and methods for SNP array data",
+	journal="Bioinformatics",
+	volume="23",
+	year="2007",
+	pages="627--628",
+	url="http://dx.doi.org/10.1093/bioinformatics/btl638",
+	textVersion=paste("SNPchip: R classes and methods for SNP
+	array data", "R.B. Scharpf and G. Parmigiani and J. Pevsner
+	and I. Ruczinski", "2007, Bioinformatics, Vol. 23, 627-628")
+) 

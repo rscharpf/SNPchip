@@ -1,0 +1,102 @@
+0.1.21 Updated to R-2.4.0 build.  Put snp Annotation in featureData slot.
+0.1.35 Updated vignette.  Added par(log) option to plotSnp and plotChromosome.
+0.1.36 Updated plotSnp.  Added black and white option. Changed plotting of x-axis.
+0.1.37 Updated plotChromosome xaxt option
+0.1.38 Added black and white option to plotChromosome
+0.1.47 use sqlite for annotation, rewrite show method for snpset
+0.1.48 chromosome annotation automatically added (if NULL) in plotSnp method
+0.1.49 removed getSnpAnnotation example in the help file since the pd.mapping annotation packages are not available on Bioconductor
+0.1.50 modified show method to print all the chromosome annotation
+1.1.1 changed SaveImage to LazyLoad
+1.1.5 - argument xaxt="n" in plotSnp now completely supresses x-axis. 
+	
+      - if argument legend has length = 1, it will automatically be repeated
+	(e.g., legend=FALSE converts to legend=c(FALSE, FALSE) and neither a legend
+	for the plotting symbols or descriptive statistics will be displayed
+
+	- removed fData and fData<- as these are now defined in Biobase
+	with the exact same definitions
+
+1.1.6 - removed fData help file
+
+1.1.7 - changed generic for plotSnp
+
+1.1.8 - removed the generic defintions for fData in SNPchip
+
+1.1.9 - fixed problem with unmatched braces in help files
+
+1.1.10 - added useLayout argument to plotSnp
+	
+1.1.11
+	- added argument outer=TRUE to plotCytoband. Specifying
+	outer=FALSE draws the axis for the cytoband within the plot
+	margins
+
+	- added argument cytobandAxis=TRUE to plotCytoband. When FALSE,
+	the cytoband axis is not drawn and only the cytoband is displayed
+
+1.1.12  
+	- moved a few packges from Depends to Suggests. Tried to move
+	oligo to suggests, but this didn't work
+
+	- updated show method for AnnotatedSnpSet. To do this, I copied
+	the selectSomeIndex method from Biobase (a method for data.frames)
+
+	- added show methods for AnnotatedSnpCallSet and AnnotatedSnpCopyNumberSet
+
+	- tinkered with the initialization methods for these classes...
+
+	- Not sure what is causing this problem: * checking R code for
+		possible problems ... NOTE Error in expMethods[[i]] <-
+		allMethodLists[ii] : more elements supplied than there are
+		to replace
+
+1.1.13  - renamed copyNumber method for SnpQSet calculateCopyNumber...moved corresponding man pages (need to add/del)
+
+1.1.14  - SNPchip now depends on R-2.6.0 and oligo version >= 1.1.5
+
+1.1.15  Removed dependency of SNPchip on oligo.  Functions for copyNumber,
+	calls, etc in functions.R are temporary until these class
+	definitions are ported to Biobase.
+
+1.1.16  
+	- removed Annotated* class definitions.  load chromosomeAnnotation when needed
+
+	- remove annSnpset.  Replace with oligoSnpSet
+	
+	- a few improvments to plotCytoband
+	
+	- added method combineChips for SnpCallSets (need to add error
+	checking).  Removed initialize method for SnpCallSet (defined in
+	oligo -- need to verify that SNPchip can see this without oligo)
+	
+	- get rid of chromosome annotation as a slot...just load the data
+	in the functions.  use b's classes directly
+
+	- change plotSnps function (remove chromosome and samples
+	arguments)...think about how to structure with the other plotting
+	functions...SnpCopyNumberSet, SnpSet, HmmSnpSet, ...
+
+	- get rid of getSnpAnnotation.  use rsqlite
+
+1.1.17  provide coercion methods for deprecated classes
+
+1.1.18
+	removed generic for plotCytoband
+	fixed bug in .orderByGenotype
+	export function .calculateYlim
+	added .getY method for SnpCallSet that jitters the genotype calls
+	
+1.1.20 fixed bug in plotCytoband example
+       changed class definition of oligoSnpSet (temporary)
+
+1.1.21 restore default par settings after calling plotCytoband
+
+##To do:  define a VIRTUAL class that extends eSet directly.  All the Snp-level sets extend
+## this virtual class.
+## - rewrite vignette
+
+
+
+	
+	

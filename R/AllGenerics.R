@@ -1,0 +1,31 @@
+setGeneric("getSnpAnnotation",             function(object, ...) standardGeneric("getSnpAnnotation"))
+setGeneric("alleleA", function(object) standardGeneric("alleleA"))
+setGeneric("alleleB", function(object) standardGeneric("alleleB"))
+setGeneric(".combineChips", function(x, y, ...) standardGeneric(".combineChips"))
+setGeneric("dbSnpId", function(object) standardGeneric("dbSnpId"))
+setGeneric("enzyme", function(object) standardGeneric("enzyme"))
+setGeneric("fragmentLength", function(object) standardGeneric("fragmentLength"))
+###setGeneric("getPar", function(object, snpset, ...) standardGeneric("getPar"))
+setGeneric("getPar", function(object, ...) standardGeneric("getPar"))
+setGeneric(".getX", function(object, ...) standardGeneric(".getX"))
+setGeneric(".getY", function(object, ...) standardGeneric(".getY"))
+setGeneric(".plotChromosome",   function(object, ...) standardGeneric(".plotChromosome"))
+setGeneric("hmmPredict", function(object) standardGeneric("hmmPredict"))
+##setGeneric("plotSnp",   function(object, snpset, ...) standardGeneric("plotSnp"))
+setGeneric("plotSnp",   function(object, hmmPredict, ...) standardGeneric("plotSnp"))
+setGeneric("ratio", function(object) standardGeneric("ratio"))
+setGeneric("ratio<-", function(object, value) standardGeneric("ratio<-"))
+setGeneric("ratioConfidence",   function(object) standardGeneric("ratioConfidence"))
+setGeneric("ratioConfidence<-",   function(object, value) standardGeneric("ratioConfidence<-"))
+setGeneric("smoothSnp", function(object, ...) standardGeneric("smoothSnp"))
+setGeneric("snpset", function(object) standardGeneric("snpset"))
+setGeneric("unsplitSnpSet", function(from, annotatedDataFrame, ...) standardGeneric("unsplitSnpSet"))
+setGeneric("allPlots",   function(object) standardGeneric("allPlots"))
+setGeneric("plotSpecific",   function(object) standardGeneric("plotSpecific"))
+setGeneric("snpPar",   function(object) standardGeneric("snpPar"))
+setGeneric("snpPar<-",   function(object, value) standardGeneric("snpPar<-"))
+
+
+
+
+
