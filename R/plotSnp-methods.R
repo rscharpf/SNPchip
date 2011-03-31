@@ -1,4 +1,4 @@
-setMethod(".plotChromosome", "eSet", 
+setMethod(".plotChromosome", "eSet",
 	  function(object, op){
 		  if(length(unique(chromosome(object))) > 1) stop(".plotChromosome should only receive one chromosome")
 		  .getCytoband <- function(object, op){
@@ -6,10 +6,10 @@ setMethod(".plotChromosome", "eSet",
 				  ##data(cytoband)
 				  pathto <- system.file("hg18", package="SNPchip")
 				  cytoband <- read.table(file.path(pathto, "cytoBand.txt"), as.is=TRUE)
-				  colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")				  
+				  colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
 				  cytoband <- cytoband[cytoband[, "chrom"] == paste("chr", unique(chromosome(object)), sep=""), ]
 			  }  else NULL
-		  }		  
+		  }
 		  cytoband <- .getCytoband(object, op)
 		  .drawCytobandWrapper <- function(S, cytoband, op, j, chromosomeName){
 			  if(!op$add.cytoband) return()
@@ -37,7 +37,7 @@ setMethod(".plotChromosome", "eSet",
 				  at <- c(0, 1)
 				  labels <- c("AA/BB", "AB")
 			  }
-			  axis(side=2, at=at, labels=labels, las=1, cex.axis=op$cex.axis)  
+			  axis(side=2, at=at, labels=labels, las=1, cex.axis=op$cex.axis)
 		  }
 
 		  .drawCentromere <- function(object, op){
@@ -49,7 +49,7 @@ setMethod(".plotChromosome", "eSet",
 			  rect(xleft=xleft, ybottom=op$ylim[1],
 			       xright=xright, ytop=op$ylim[2],
 			       col=op$col.centromere,
-			       border=op$border.centromere)  
+			       border=op$border.centromere)
 		  }
 		  if(op$cytoband.side == 3) cytobandOnTop <- TRUE else cytobandOnTop <- FALSE
 		  if(cytobandOnTop){
@@ -83,7 +83,7 @@ setMethod(".plotChromosome", "eSet",
 					       op=op,
 					       j=j,
 					       chromosomeName=unique(chromosome(object)))
-			  .drawXaxis(object=object, op=op, j=j)		  			  
+			  .drawXaxis(object=object, op=op, j=j)
 		  }
 		  return(op)
           })
@@ -136,7 +136,7 @@ setMethod(".plotChromosome", "eSet",
 		if(inherits(object, "SnpSet")){
 			gt <- as.vector(calls(object))
 			gt[is.na(gt)] <- 4
-			  
+
 			if(sum(!(gt %in% 1:4)) > 0){
 				warning("Changing all genotypes that are not 1, 2, 3 to the value 4")
 				gt[!(gt %in% 1:4)] <- 4
@@ -146,11 +146,11 @@ setMethod(".plotChromosome", "eSet",
 				##this is a bad idea
 				x <- x[1:length(unique(gt))]
 			}
-			
+
 			##number of unique calls is greater than the
 			##length of the supplied colors
 			if(length(x) < length(unique(gt))){
-				l <- length(unique(gt)) - length(x) 
+				l <- length(unique(gt)) - length(x)
 				x <- c(x, rep(missing, l))
 			}
 
@@ -180,7 +180,7 @@ setMethod("plotSnp", "eSet",
 			  hmmPredict <- hmmPredict[i, j]
 		  }
 		  ## create an appropriate class according to the class of
-		  ## eSet		  
+		  ## eSet
 		  gp <- switch(class(object),
 			       oligoSnpSet=new("ParSnpSet", snpset=object, ...),
 			       SnpCallSet=new("ParSnpCallSet", snpset=object, ...),
@@ -201,7 +201,7 @@ setMethod("plot", "eSet",
 			  y <- y[i, j]
 		  }
 		  ## create an appropriate class according to the class of
-		  ## eSet		  
+		  ## eSet
 		  gp <- switch(class(x),
 			       oligoSnpSet=new("ParSnpSet", snpset=x, ...),
 			       SnpCallSet=new("ParSnpCallSet", snpset=x, ...),
@@ -216,7 +216,7 @@ setMethod("plot", "eSet",
 
 
 ##could we extend the trellis class? (probably too complicated)
-setMethod("show", "ParESet",	  
+setMethod("show", "ParESet",
 	  function(object){
 		  snpset <- object@snpset
 		  snpset <- snpset[!is.na(chromosome(snpset)), ]
@@ -228,12 +228,12 @@ setMethod("show", "ParESet",
 		  }
 		  snpList <- split(snpset, chromosome(snpset))
 		  names(snpList)[names(snpList) == "X"] <- "23"
-		  names(snpList)[names(snpList) == "XY"] <- "24"            
+		  names(snpList)[names(snpList) == "XY"] <- "24"
 		  names(snpList)[names(snpList) == "Y"] <- "25"
-		  names(snpList)[names(snpList) == "M"] <- "26"            
+		  names(snpList)[names(snpList) == "M"] <- "26"
 		  snpList <- snpList[order(as.numeric(names(snpList)))]
 		  names(snpList)[names(snpList) == "23"] <- "X"
-		  names(snpList)[names(snpList) == "24"] <- "XY"            
+		  names(snpList)[names(snpList) == "24"] <- "XY"
 		  names(snpList)[names(snpList) == "25"] <- "Y"
 		  names(snpList)[names(snpList) == "26"] <- "M"
 		  if(length(snpList) > 10) object$abbreviateChromosomeNames <- TRUE else object$abbreviateChromosomeNames <- FALSE
@@ -267,7 +267,7 @@ setMethod("show", "ParSnpCopyNumberSet",
 setMethod("show", "ParSnpCallSet",
           function(object){
 		  old.par <- par(no.readonly=TRUE)
-		  on.exit(old.par)            
+		  on.exit(old.par)
 		  callNextMethod()
           })
 
@@ -320,7 +320,7 @@ setMethod("show", "ParSnpSet",
 	col <- .recycle(op$col, object, missing="grey40")
 	cex <- .recycle(op$cex, object, missing=op$cex[1])
 	pch <- .recycle(op$pch, object, missing=op$pch[1])
-	bg <- .recycle(op$bg, object, missing="grey40")	
+	bg <- .recycle(op$bg, object, missing="grey40")
 	.orderByGenotype <- function(object){
 		if(!("calls" %in% ls(assayData(object)))){
 			return(1:nrow(object))
@@ -380,7 +380,7 @@ setMethod("show", "ParSnpSet",
 ##                         cytoband,
 ##			 cytoband.ycoords,
 ##                         xlim,
-##			 ylim=c(0, 2),			 
+##			 ylim=c(0, 2),
 ##                         xaxs="r",
 ##                         new=TRUE,
 ##                         label.cytoband=TRUE,  ##whether to label cytobands
@@ -406,7 +406,7 @@ setMethod("show", "ParSnpSet",
 ##	if(missing(xlim)) xlim <- c(0, chromosomeSize(unique(cytoband$chrom)))
 ##	cytoband_p <- cytoband[grep("^p", rownames(cytoband), value=TRUE), ]
 ##	cytoband_q <- cytoband[grep("^q", rownames(cytoband), value=TRUE), ]
-##  
+##
 ##	p.bands <- nrow(cytoband_p)
 ##	cut.left  <- c()
 ##	cut.right <- c()
@@ -487,7 +487,7 @@ setMethod("show", "ParSnpSet",
 ##			##Taper both ends
 ##			yy <- c(bot + p*h, bot, bot, bot + p*h, top - p*h, top, top, top - p*h)
 ##			polygon(c(start, start+delta, last-delta, last, last, last-delta, start+delta, start),
-##				yy, col=color)			
+##				yy, col=color)
 ##		} else if (cut.left[i]) {              # cut left last only
 ##			##Taper left end only
 ##			yy <- c(bot + p*h, bot, bot, top, top, top - p*h)
@@ -535,7 +535,7 @@ plotCytoband <- function(chromosome,
                          cytoband,
 			 cytoband.ycoords,
                          xlim,
-			 ylim=c(0, 2),			 
+			 ylim=c(0, 2),
                          new=TRUE,
                          label.cytoband=TRUE,  ##whether to label cytobands
 			 label.y=NULL,         ##if specified, use text() rather than axis()
@@ -548,6 +548,10 @@ plotCytoband <- function(chromosome,
                          ...){
 	##def.par <- par(no.readonly=TRUE)
 	##on.exit(def.par)
+	if("use.lattice" %in% names(list(...))) {
+		segments <- lsegments
+		polygon <- lpolygon
+	}
 	if(missing(cytoband)){
 		if(verbose) message(paste("Cytoband annotation obtained from build", build))
 		pathto <- system.file("hg18", package="SNPchip")
@@ -568,7 +572,7 @@ plotCytoband <- function(chromosome,
 	if(missing(xlim)) xlim <- c(0, chromosomeSize(unique(cytoband$chrom)))
 	cytoband_p <- cytoband[grep("^p", rownames(cytoband), value=TRUE), ]
 	cytoband_q <- cytoband[grep("^q", rownames(cytoband), value=TRUE), ]
-  
+
 	p.bands <- nrow(cytoband_p)
 	cut.left  <- c()
 	cut.right <- c()
@@ -651,7 +655,7 @@ plotCytoband <- function(chromosome,
 			##Taper both ends
 			yy <- c(bot + p*h, bot, bot, bot + p*h, top - p*h, top, top, top - p*h)
 			polygon(c(start, start+delta, last-delta, last, last, last-delta, start+delta, start),
-				yy, col=color)			
+				yy, col=color)
 		} else if (cut.left[i]) {              # cut left last only
 			##Taper left end only
 			yy <- c(bot + p*h, bot, bot, top, top, top - p*h)
