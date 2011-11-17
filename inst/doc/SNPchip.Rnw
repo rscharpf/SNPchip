@@ -34,7 +34,7 @@
 
 <<options, echo=FALSE, hide=TRUE>>=
 options(width=60)
-@ 
+@
 
 \maketitle
 
@@ -51,18 +51,18 @@ further developed.  See \cite{Scharpf2007} for additional details.
 
 <<package, hide=TRUE>>=
 library(SNPchip)
-@ 
+@
 
 <<exampledata>>=
 data(sample.snpset)
 sample.snpset
-@ 
+@
 
 <<featureData,eval=FALSE, echo=FALSE>>=
 fD <- new("AnnotatedDataFrame", data=data.frame(row.names=featureNames(sample.snpset)),
           varMetadata=data.frame(labelDescription=character()))
 featureData(sample.snpset) <- fD
-@ 
+@
 
 For Affymetrix platforms, access to SNP-level annotation such as
 chromosome and physical position is through \Rpackage{RSQLite}.  See
@@ -89,7 +89,7 @@ for this vignette.
 %	featureData(sample.snpset)$position <- position(sample.snpset)
 %	system.time(tmp <- chromosome(sample.snpset))
 %}
-%@ 
+%@
 
 Note that if one is using a platform for which there is no
 \Robject{pd.mapping} package available, one must provide the
@@ -102,14 +102,18 @@ Here we select SNPs on the first three chromosomes. An object of class
 data for this subset:
 
 <<subsetting>>=
+## works
 snpset <- sample.snpset[chromosome(sample.snpset) %in% as.character(1:3), 1:4]
+## does not work
+x <- sample.snpset[chromosome(sample.snpset) %in% as.character(3), 1:4]
+gp <- plot(x)
 graph.par <- plot(snpset)
 class(graph.par)
 graph.par$use.chromosome.size <- TRUE
 graph.par$pch <- "."
 graph.par$cex <- 3
 graph.par$oma <- c(3, 3, 3, 0.5)
-@ 
+@
 
 Plot the first few chromosomes for samples 1-4 (note the print()
 command is needed for producing the figures in the vignette, but just
@@ -117,7 +121,7 @@ typing the object name is sufficient for plotting):
 
 <<plot1, fig=TRUE, width=9, height=6>>=
 print(graph.par)
-@ 
+@
 
 <<>>=
 graph.par$cytoband.side <- 3
@@ -127,7 +131,7 @@ graph.par$heights <- rev(graph.par$heights)
 <<plot1a, fig=TRUE, width=8, height=6, eval=FALSE, echo=FALSE>>=
 ##FIXME
 show(graph.par)
-@ 
+@
 
 The samples are plotted by row. For each sample, the copy number
 (vertical axis) is plotted against the physical position of the SNP in
@@ -151,12 +155,12 @@ graph.par$cex <- 2
 graph.par$abline <- TRUE
 graph.par$cex.lab <- 0.9
 graph.par$add.cytoband <- FALSE
-@ 
+@
 
 
 <<plot2, fig=TRUE, width=8, height=4>>=
 print(graph.par)
-@ 
+@
 
 Note that we suppress the cytobands in the above plot (the resolution
 is too poor at this level) by the argument \Robject{add.cytoband} in
@@ -177,11 +181,11 @@ graph.par$pch <- 21
 graph.par$cex <- 1
 graph.par$ylim <- c(0.4, 9)
 graph.par$cytoband.ycoords <- c(0.5, 0.6)
-@ 
+@
 
 <<plotP, fig=TRUE, width=8, height=7>>=
 print(graph.par)
-@ 
+@
 
 Note that the cytoband is automatically subsetted appropriately. Had
 we instead specified \texttt{use.chromosome.size=TRUE}, the x-axis
@@ -209,7 +213,7 @@ print(gp)
 ##plotCytoband("1", xlim=xlim, label.cytoband=TRUE)
 ##xlim <- c(0, max(position(x)))
 ##plotCytoband("1", xlim=xlim, label.cytoband=TRUE)
-@ 
+@
 
 %Alternatively, plot the cytoband on top and then add the legend to the plot by hand.
 
@@ -218,7 +222,7 @@ print(gp)
 ##gp <- new("ParSnpSet")
 ##gp <- getPar(gp, x)
 gp$pch <- 21; gp$cex <- 0.8
-##gp$cytoband.side <- 3; 
+##gp$cytoband.side <- 3;
 ##gp$heights <- rev(gp$heights)
 gp$label.cytoband <- TRUE
 gp$ylim[2] <- 10
@@ -226,11 +230,11 @@ gp$cytoband.ycoords <- c(0.9, 10)
 gp$add.centromere <- FALSE
 gp
 ##plot(gp, x)
-legend("bottomleft", 
-       pch=21, 
-       col=gp$col, 
+legend("bottomleft",
+       pch=21,
+       col=gp$col,
        pt.bg=gp$bg, legend=c("AA", "AB", "BB"), bty="n")
-@ 
+@
 
 \subsection{Plotting cytoband}
 
@@ -238,7 +242,7 @@ To plot the cytoband of chromosome 1,
 
 <<cytoband, fig=TRUE, width=10, height=2>>=
 plotCytoband("1")
-@ 
+@
 
 %\subsection{Smoothing example}
 
@@ -263,13 +267,13 @@ an \Robject{oligoSnpSet} object for one chromosome.
 %calls(sim1)[101:150, 1] <- 1
 %smoothSet <- smoothSnp(sim1, 1:5, 1:3, span=1/10)
 %highlight <- calls(smoothSet)[, 1] <= 0.1 & copyNumber(smoothSet)[, 1] <= 1.5
-%@ 
+%@
 %
 %A plot of the smoothed calls versus copynumber can be used to
 %visualize the deletion:
 %<<plotSmooth,fig=TRUE, height=4, width=9>>=
 %op <- par(las=1, mfrow=c(1, 1), mar=c(5, 4, 0.5, 0.5), oma=rep(0, 4))
-%plot(calls(smoothSet)[, 1], copyNumber(smoothSet)[, 1], 
+%plot(calls(smoothSet)[, 1], copyNumber(smoothSet)[, 1],
 %     ylim=range(copyNumber(smoothSet)), pch=".", cex=3,
 %     xlab="% heterozygous calls",
 %     ylab="smooth copy number", xaxt="n", xlim=c(-0.05, 30/70+.2))
@@ -277,7 +281,7 @@ an \Robject{oligoSnpSet} object for one chromosome.
 %points(calls(smoothSet)[highlight, 1], copyNumber(smoothSet)[highlight, 1],
 %       pch=20, col="royalblue", bg="white")
 %par(op)
-%@ 
+%@
 %
 %<<plot3, fig=TRUE, width=8, height=5>>=
 %graph.par$cex <- 1
@@ -285,7 +289,7 @@ an \Robject{oligoSnpSet} object for one chromosome.
 %graph.par$main <- "Chromosome 1: Example title"
 %graph.par$label.chromosome <- FALSE
 %print(graph.par)
-%@ 
+%@
 
 \subsection{Descriptive and statistical summaries}
 
@@ -303,15 +307,15 @@ number of samples and C is the number of chromosomes in the
 <<summary>>=
 x <- summary(sample.snpset, digits=1)
 str(x)
-@ 
+@
 
 Boxplot by chromosome:
 <<summaryPlot, fig=TRUE, width=8, height=4>>=
 op <- par(mfrow=c(1,1), mar=c(4, 4, 3, 1), las=1)
-boxplot(split(copyNumber(sample.snpset[, 1]), chromosome(sample.snpset)), 
+boxplot(split(copyNumber(sample.snpset[, 1]), chromosome(sample.snpset)),
         ylab="copy number", main=sampleNames(sample.snpset)[1], log="y")
 par(op)
-@ 
+@
 
 \section{Annotation}
 
@@ -324,7 +328,7 @@ list.files(system.file("hg18", package="SNPchip"))
 ##chromosomeAnnotation[1:5, ]
 ##data(cytoband)
 ##cytoband[1:5, ]
-@ 
+@
 
 \subsection{Feature-level}
 
@@ -334,7 +338,7 @@ pd.mapping packages.
 <<annotationSlot, eval=FALSE, echo=FALSE>>=
 annotation(sample.snpset)
 library("pd.mapping50k.xba240")
-@ 
+@
 
 See the \Rpackage{oligo} vignette for additional information about
 available feature-level annotation.
@@ -346,7 +350,7 @@ available feature-level annotation.
 <<getSnpAnnotation, eval=FALSE, echo=FALSE>>=
 featureData(sample.snpset) <- getSnpAnnotation(sample.snpset)
 fvarLabels(sample.snpset)
-@ 
+@
 
 %Alternatively, one may obtain the NetAffx annotation saved as an R
 %object here:
@@ -354,7 +358,7 @@ fvarLabels(sample.snpset)
 path <- "http://biostat.jhsph.edu/~iruczins/publications/sm/2006.scharpf.bioinfo"
 try(load(url(paste(path, "/mapping/mapping10k.rda", sep=""))))
 colnames(mapping10k$annotation)
-@ 
+@
 
 \section{Integration with other Bioconductor packages}
 
@@ -377,14 +381,14 @@ library(RSNPper)
 (dbId <- dbSnpId(annSnpset)[snps[2] == featureNames(annSnpset)])
 dbId <- strsplit(dbId, "rs")[[1]][2]
 print(SNPinfo(dbId))
-@ 
+@
 
 \section{Session Information}
 The version number of R and packages loaded for generating the vignette were:
 
 <<echo=FALSE, results=tex>>=
 toLatex(sessionInfo())
-@ 
+@
 
 \bibliography{refs}
 \bibliographystyle{plain}

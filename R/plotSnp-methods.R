@@ -1,63 +1,67 @@
+.getCytoband <- function(object, op){
+	##browser()
+	if(op$add.cytoband){
+		##data(cytoband)
+		pathto <- system.file("hg18", package="SNPchip")
+		cytoband <- read.table(file.path(pathto, "cytoBand.txt"), as.is=TRUE)
+		colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
+		cytoband <- cytoband[cytoband[, "chrom"] == paste("chr", unique(chromosome(object)), sep=""), ]
+	}  else NULL
+}
+
+.drawCytobandWrapper <- function(S, cytoband, op, j, chromosomeName){
+	if(!op$add.cytoband) return()
+	if(nrow(cytoband) > 0)
+		plotCytoband(cytoband=cytoband,
+			     new=FALSE,
+			     cytoband.ycoords=op$cytoband.ycoords,
+			     xlim=op$xlim[as.character(chromosomeName), ],
+			     xaxs=op$xaxs,
+			     label.cytoband=op$label.cytoband,
+			     srt=op$cytoband.srt,
+			     label.y=op$cytoband.label.y,
+			     cex.axis=op$cex.axis,
+			     outer=op$outer.cytoband.axis,
+			     taper=op$cytoband.taper)
+}
+
+.drawYaxis <- function(object, op, j){
+	if(unique(chromosome(object)) != op$firstChromosome) return()
+	if(op$yaxt == "n") return()
+	if("copyNumber" %in% ls(assayData(object)) | "ratio" %in% ls(assayData(object))){
+		at <- pretty(op$ylim)
+		at <- c(op$at, at)
+		labels <- at
+	}  else {
+		at <- c(0, 1)
+		labels <- c("AA/BB", "AB")
+	}
+	axis(side=2, at=at, labels=labels, las=1, cex.axis=op$cex.axis)
+}
+
+.drawCentromere <- function(object, op){
+	centromere.coords <- centromere(unique(chromosome(object)))
+	##data(chromosomeAnnotation, package="SNPchip", envir=environment())
+	##centromere <- chromosomeAnnotation[unique(chromosome(object)), ]
+	xleft <- centromere.coords[1]
+	xright <- centromere.coords[2]
+	rect(xleft=xleft, ybottom=op$ylim[1],
+	     xright=xright, ytop=op$ylim[2],
+	     col=op$col.centromere,
+	     border=op$border.centromere)
+}
+
 setMethod(".plotChromosome", "eSet",
 	  function(object, op){
 		  if(length(unique(chromosome(object))) > 1) stop(".plotChromosome should only receive one chromosome")
-		  .getCytoband <- function(object, op){
-			  if(op$add.cytoband){
-				  ##data(cytoband)
-				  pathto <- system.file("hg18", package="SNPchip")
-				  cytoband <- read.table(file.path(pathto, "cytoBand.txt"), as.is=TRUE)
-				  colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
-				  cytoband <- cytoband[cytoband[, "chrom"] == paste("chr", unique(chromosome(object)), sep=""), ]
-			  }  else NULL
-		  }
 		  cytoband <- .getCytoband(object, op)
-		  .drawCytobandWrapper <- function(S, cytoband, op, j, chromosomeName){
-			  if(!op$add.cytoband) return()
-			  if(nrow(cytoband) > 0)
-				  plotCytoband(cytoband=cytoband,
-					       new=FALSE,
-					       cytoband.ycoords=op$cytoband.ycoords,
-					       xlim=op$xlim[chromosomeName, ],
-					       xaxs=op$xaxs,
-					       label.cytoband=op$label.cytoband,
-					       srt=op$cytoband.srt,
-					       label.y=op$cytoband.label.y,
-					       cex.axis=op$cex.axis,
-					       outer=op$outer.cytoband.axis,
-					       taper=op$cytoband.taper)
-		  }
-		  .drawYaxis <- function(object, op, j){
-			  if(unique(chromosome(object)) != op$firstChromosome) return()
-			  if(op$yaxt == "n") return()
-			  if("copyNumber" %in% ls(assayData(object)) | "ratio" %in% ls(assayData(object))){
-				  at <- pretty(op$ylim)
-				  at <- c(op$at, at)
-				  labels <- at
-			  }  else {
-				  at <- c(0, 1)
-				  labels <- c("AA/BB", "AB")
-			  }
-			  axis(side=2, at=at, labels=labels, las=1, cex.axis=op$cex.axis)
-		  }
-
-		  .drawCentromere <- function(object, op){
-			  centromere.coords <- centromere(unique(chromosome(object)))
-			  ##data(chromosomeAnnotation, package="SNPchip", envir=environment())
-			  ##centromere <- chromosomeAnnotation[unique(chromosome(object)), ]
-			  xleft <- centromere.coords[1]
-			  xright <- centromere.coords[2]
-			  rect(xleft=xleft, ybottom=op$ylim[1],
-			       xright=xright, ytop=op$ylim[2],
-			       col=op$col.centromere,
-			       border=op$border.centromere)
-		  }
 		  if(op$cytoband.side == 3) cytobandOnTop <- TRUE else cytobandOnTop <- FALSE
 		  if(cytobandOnTop){
 			  .drawCytobandWrapper(S=ncol(object),
 					       cytoband=cytoband,
 					       op=op,
 					       j=j,
-					       chromosomeName=unique(chromosome(object)))
+					       chromosomeName=as.character(unique(chromosome(object))))
 		  }
 		  for(j in 1:ncol(object)){
 			  op$main <- op$main[j]
@@ -245,7 +249,7 @@ setMethod("show", "ParESet",
 		  par(allPlots(object))
 		  for(i in 1:length(snpList)){
 			  if(i == 1) par(yaxt="s") else par(yaxt="n")
-			  object <- .plotChromosome(snpList[[i]], op=object)
+			  object <- .plotChromosome(object=snpList[[i]], op=object)
 		  }
 		  if(object$outer.ylab) mtext(object$ylab, side=object$side.ylab, outer=TRUE, las=3, cex=object$cex.ylab, line=object$line.ylab)
 		  mtext(object$xlab, side=object$side.xlab, outer=object$outer.xlab, cex=object$cex.xlab, line=object$line.xlab, adj=0)

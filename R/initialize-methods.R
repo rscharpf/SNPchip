@@ -17,7 +17,7 @@ setMethod("initialize", "ParSnpSet",
           function(.Object, ...){
             .Object <- callNextMethod(.Object, ...)
             .Object$col <- c("lightblue", "red", "lightblue")
-            .Object$bg <- c("lightblue", "red", "lightblue")            
+            .Object$bg <- c("lightblue", "red", "lightblue")
             .Object$ylab <- "copy number"
 	    .Object$legend.fill <- .Object$col
             .Object
@@ -28,19 +28,28 @@ setMethod("initialize", "ParESet",
           function(.Object,
 		   snpset,
 		   hmmPredict=NULL, ...){
-		  if(missing(snpset)){
-			  stop("snpset missing")
+		  if("snpset" %in% names(list(...))){
+			  snpset <- list(...)[["snpset"]]
 		  }
+##		  if(missing(snpset)){
+##			  stop("snpset missing")
+##		  }
 		  if(!extends(class(snpset), "eSet")){
 			  stop("snpset must extend eSet")
 		  }
 		  .Object@snpset <- snpset
-		  if(!is.null(hmmPredict)){
+		  if("hmmPredict" %in% names(list(...))){
+			  hmmPredict <- list(...)[["hmmPredict"]]
 			  if(!extends(class(hmmPredict, "eSet"))){
 				  stop("hmmPredict must extend eSet. See VanillaICE package")
-			  } 
+			  }
+			  .Object@hmmPredict <- hmmPredict
 		  }
-		  .Object@hmmPredict <- hmmPredict
+##		  if(!is.null(hmmPredict)){
+##			  if(!extends(class(hmmPredict, "eSet"))){
+##				  stop("hmmPredict must extend eSet. See VanillaICE package")
+##			  }
+##		  }
 		  .Object@snpPar <- list(layout=TRUE,
 					 col.axis="brown",
 					 cex.main=1,
@@ -86,7 +95,7 @@ setMethod("initialize", "ParESet",
 					 one.ylim=TRUE,
 					 add.cytoband=TRUE,
 					 outer.cytoband=FALSE,
-					 outer.cytoband.axis=FALSE,                   
+					 outer.cytoband.axis=FALSE,
 					 label.cytoband=FALSE,
 					 cytoband.ycoords=NULL,
 					 hmm.ycoords=NULL,
