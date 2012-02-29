@@ -112,7 +112,7 @@ chromosomeSize <- function(chromosome, build="hg18", verbose=FALSE){
 	}
 }
 
-plotCytoband <- function(chromosome,
+plotIdiogram <- function(chromosome,
                          cytoband,
 			 cytoband.ycoords,
                          xlim,
@@ -279,4 +279,6 @@ plotCytoband <- function(chromosome,
 	}
 	return()
 }
+
+plotCytoband <- function(...) .Deprecated("plotCytoband is deprecated. Use plotIdiogram instead.")
 
