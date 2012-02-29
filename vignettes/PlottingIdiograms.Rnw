@@ -1,0 +1,37 @@
+%\VignetteIndexEntry{Plotting Idiograms}
+%\VignetteKeywords{copy number, SNP}
+%\VignettePackage{SNPchip}
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rcode}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textsf{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+\newcommand{\R}{\textsf{R}}
+\usepackage[margin=1in]{geometry}
+
+
+\title{Plotting Idiograms}
+\date{\today}
+
+\author{Rob Scharpf}
+
+\begin{document}
+\maketitle
+
+\section{Simple Usage}
+
+Plotting an idiogram for chromosome 1.
+
+<<>>=
+@
+
+\end{document}
