@@ -35,6 +35,5 @@ outer=FALSE, taper=0.15, verbose=FALSE, build="hg18", ...)
 \examples{
 plotCytoband("1")
 }
-\seealso{\code{\link{plotSnp}}, \code{\link{cytoband}}}
 \keyword{aplot}
 
