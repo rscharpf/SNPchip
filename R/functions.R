@@ -7,11 +7,6 @@ centromere <- function(chromosome, build="hg18", verbose=FALSE){
 }
 
 
-integer2chromosome <- function(chrom){
-	chrom[chrom == 23] <- "X"; chrom[chrom == 24] <- "Y"; chrom[chrom == 25] <- "XY"; chrom[chrom==26] <- "M"
-	chrom
-}
-
 chromosomeSize <- function(chromosome, build="hg18", verbose=FALSE){
 	if(verbose) message(paste("chromosome size using build", build))
 	if(!is.character(chromosome)) stop("argument to chromosomeSize must be one of the following character strings: 1, ..., 22, X, or Y")
