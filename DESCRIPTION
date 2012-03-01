@@ -4,7 +4,7 @@ Title: Visualizations for copy number alterations
 Author: Robert Scharpf <rscharpf@jhsph.edu> and Ingo Ruczinski
 Maintainer: Robert Scharpf <rscharpf@jhsph.edu>
 Depends: R (>= 2.13.0), methods, oligoClasses (>= 1.17.10)
-Imports: graphics
+Imports: graphics, lattice
 Suggests: crlmm, VanillaICE, RColorBrewer
 Description: This package defines methods for visualizing high-throughput genomic data
 License: LGPL (>= 2)

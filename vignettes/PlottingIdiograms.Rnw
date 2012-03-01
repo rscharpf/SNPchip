@@ -29,9 +29,14 @@
 
 \section{Simple Usage}
 
-Plotting an idiogram for chromosome 1.
+<<packages, results=hide>>=
+library(SNPchip)
+@
 
-<<>>=
+Plot an idiogram for chromosome 1.
+
+<<label=chr1, fig=TRUE, include=TRUE, width=12, height=2, results=hide>>=
+plotIdiogram("1", cex=0.8)
 @
 
 \end{document}
