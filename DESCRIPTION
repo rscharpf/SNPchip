@@ -1,24 +1,15 @@
 Package: SNPchip
-Version: 1.19.2
-Title: Classes and Methods for high throughput SNP chip data
+Version: 2.0.0
+Title: Visualizations for copy number alterations
 Author: Robert Scharpf <rscharpf@jhsph.edu> and Ingo Ruczinski
 Maintainer: Robert Scharpf <rscharpf@jhsph.edu>
-Depends: R (>= 2.10.0), Biobase (>= 2.7.4), methods, oligoClasses (>= 1.9.52), graphics
-Imports: Biobase (>= 2.7.4), graphics, grDevices, methods, oligoClasses (>= 1.9.52), stats, utils
-Suggests: RSQLite, VanillaICE, RColorBrewer, genefilter, pd.mapping50k.xba240
-Description: This package defines classes and functions for plotting copy number and genotype in high throughput SNP platforms such as Affymetrix and Illumina.  In particular, SNPchip is a useful add-on to the oligo package for visualizing SNP-level estimates after pre-processing.
+Depends: R (>= 2.13.0), methods, oligoClasses (>= 1.17.10)
+Imports: graphics, lattice
+Suggests: crlmm, VanillaICE, RColorBrewer
+Description: This package defines methods for visualizing high-throughput genomic data
 License: LGPL (>= 2)
 LazyLoad: yes
-Collate: AllClasses.R
-	 AllGenerics.R
-	 methods-ParESet.R
-	 initialize-methods.R
-	 methods-SnpSet.R
-	 methods-AnnotatedDataFrame.R
-	 methods-oligoSnpSet.R
-	 plotSnp-methods.R
-	 methods-list.R
-	 functions.R
+Collate: functions.R
 	 zzz.R
 biocViews: CopyNumberVariants, SNP, GeneticVariability, Visualization
 URL:http://www.biostat.jhsph.edu/~iruczins/software/snpchip.html

@@ -1,12 +1,11 @@
-\name{plotCytoband}
-\alias{plotCytoband}
+\name{plotIdiogram}
+\alias{plotIdiogram}
 \title{Plots idiogram for one chromosome}
 
-\description{ Adds cytobands to views of chromosome copy number and
-  genotype plots.  }
+\description{ Draw an idiogram for the specified chromosome.}
 
 \usage{
-plotCytoband(chromosome, cytoband, cytoband.ycoords, xlim, ylim=c(0, 2),
+plotIdiogram(chromosome, cytoband, cytoband.ycoords, xlim, ylim=c(0, 2),
 new=TRUE, label.cytoband=TRUE, label.y=NULL, srt, cex.axis=1,
 outer=FALSE, taper=0.15, verbose=FALSE, build="hg18", ...)
 }
@@ -33,8 +32,7 @@ outer=FALSE, taper=0.15, verbose=FALSE, build="hg18", ...)
 
 \author{Robert Scharpf and Jason Ting}
 \examples{
-plotCytoband("1")
+plotIdiogram("1")
 }
-\seealso{\code{\link{plotSnp}}, \code{\link{cytoband}}}
 \keyword{aplot}
 
