@@ -1,3 +1,16 @@
-importFrom(lattice, lpolygon, lsegments)
-export(plotCytoband, plotIdiogram)
+## lattice
+importFrom(lattice, lpolygon, lsegments, xyplot,
+	   simpleKey, panel.grid, panel.xyplot, lrect, ltext,
+	   lpoints, panel.number, current.panel.limits)
+## grid
+importFrom(grid, grid.newpage, viewport, pushViewport, upViewport, dataViewport, unit)
+
+## foreach
+importFrom(foreach, "%do%")
+
+## IRanges
+importMethodsFrom(IRanges, as.matrix)
+
+export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide)
+exportMethods(xyplot, xyplot2)
 
