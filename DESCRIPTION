@@ -1,15 +1,20 @@
 Package: SNPchip
-Version: 2.0.0
+Version: 2.0.1
 Title: Visualizations for copy number alterations
 Author: Robert Scharpf <rscharpf@jhsph.edu> and Ingo Ruczinski
 Maintainer: Robert Scharpf <rscharpf@jhsph.edu>
-Depends: R (>= 2.13.0), methods, oligoClasses (>= 1.17.10)
-Imports: graphics, lattice
+Depends: R (>= 2.13.0), methods, oligoClasses (>= 1.17.25)
+Imports: graphics, lattice, grid, foreach, IRanges
 Suggests: crlmm, VanillaICE, RColorBrewer
 Description: This package defines methods for visualizing high-throughput genomic data
 License: LGPL (>= 2)
 LazyLoad: yes
-Collate: functions.R
+Collate: AllGenerics.R
+         coerce-methods.R
+	 xyplot-methods.R
+	 grid-functions.R
+	 idiogram-functions.R
+	 panel-functions.R
 	 zzz.R
 biocViews: CopyNumberVariants, SNP, GeneticVariability, Visualization
 URL:http://www.biostat.jhsph.edu/~iruczins/software/snpchip.html
