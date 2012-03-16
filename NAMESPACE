@@ -11,6 +11,6 @@ importFrom(foreach, "%do%")
 ## IRanges
 importMethodsFrom(IRanges, as.matrix)
 
-export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide)
+export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide, centromere)
 exportMethods(xyplot, xyplot2)
 
