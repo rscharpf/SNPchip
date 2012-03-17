@@ -126,10 +126,12 @@ plotIdiogram <- function(chromosome,
 			 taper=0.15,
 			 verbose=FALSE,
 			 build="hg18",
+			 unit=c("bp", "Mb"),
+			 is.lattice=FALSE,
                          ...){
 	##def.par <- par(no.readonly=TRUE)
 	##on.exit(def.par)
-	if("use.lattice" %in% names(list(...))) {
+	if(is.lattice){
 		segments <- lsegments
 		polygon <- lpolygon
 	}
@@ -146,11 +148,17 @@ plotIdiogram <- function(chromosome,
 	if(length(unique(cytoband$chrom)) > 1){
 		cytoband <- cytoband[cytoband[, "chrom"] == paste("chr", chromosome, sep=""), ]
 	}
+	unit <- match.arg(unit)
+	if(unit=="Mb"){
+		cytoband$start <- cytoband$start/1e6
+		cytoband$end <- cytoband$end/1e6
+	}
 	if(missing(cytoband.ycoords)){
 		cytoband.ycoords <- ylim
 	}
 	rownames(cytoband) <- as.character(cytoband[, "name"])
 	if(missing(xlim)) xlim <- c(0, chromosomeSize(unique(cytoband$chrom)))
+	if(unit=="Mb") xlim <- xlim/1e6
 	cytoband_p <- cytoband[grep("^p", rownames(cytoband), value=TRUE), ]
 	cytoband_q <- cytoband[grep("^q", rownames(cytoband), value=TRUE), ]
 
@@ -177,7 +185,7 @@ plotIdiogram <- function(chromosome,
 	}
 	##When plotting subregions of a chromosome, this prevents the
 	##cytobands from extending beyond the subsetted object
-
+	##
 	## exclude cytobands that end before the minimum plotting
 	##limits
 	include <- cytoband[, "end"] > xlim[1] & cytoband[, "start"] < xlim[2]
@@ -206,7 +214,7 @@ plotIdiogram <- function(chromosome,
 	bot <- cytoband.ycoords[1]
 	h <- top-bot
 	p <- taper
-	for (i in 1:nrow(cytoband)) {
+	for(i in seq_len(nrow(cytoband))) {
 		start <- cytoband[i, "start"]
 		last   <- cytoband[i, "end"]
 		delta = (last-start)/4
@@ -254,7 +262,7 @@ plotIdiogram <- function(chromosome,
 		}
 	}
 	my.x <- (cytoband[, "start"] + cytoband[, "end"])/2
-	if(label.cytoband){
+	if(label.cytoband & !is.lattice){
 		if(is.null(label.y)){
 			##if plotting on a new device
 			axis(1,

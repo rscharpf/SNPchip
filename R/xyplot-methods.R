@@ -90,6 +90,11 @@ setMethod("xyplot", signature(x="formula", data="SnpSet"),
 		  }
 })
 
+xyplotOligoSnpSet <- function(x, object, ...){
+	df <- as(object, "data.frame")
+	xyplot(x, df, ...)
+}
+
 xyplotLrrBaf <- function(rd, object, frame, ...){
 	index <- seq_len(nrow(rd))
 	df <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd[i, ],
