@@ -7,7 +7,7 @@
 \usage{
 plotIdiogram(chromosome, cytoband, cytoband.ycoords, xlim, ylim=c(0, 2),
 new=TRUE, label.cytoband=TRUE, label.y=NULL, srt, cex.axis=1,
-outer=FALSE, taper=0.15, verbose=FALSE, build="hg18", ...)
+outer=FALSE, taper=0.15, verbose=FALSE, build="hg18", unit=c("bp", "Mb"), is.lattice=FALSE,...)
 }
 \arguments{
   \item{chromosome}{character string or integer: which chromosome to draw the
@@ -27,6 +27,10 @@ outer=FALSE, taper=0.15, verbose=FALSE, build="hg18", ...)
   \item{verbose}{Logical.  If TRUE, displays human genome build used to
     annotated the cytoband coordinates.}
   \item{build}{Character string.  Currently only "hg18" is allowed.}
+  \item{unit}{Character string indicating the unit for physical position
+    on the x-axis. Available options are basepairs (bp) or Mb.}
+  \item{is.lattice}{logical indicating whether your drawing the cytoband
+    on a lattice graphic.}
   \item{\dots}{additional arguments to plot}
 }
 

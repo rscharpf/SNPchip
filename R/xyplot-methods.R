@@ -14,9 +14,9 @@
 	if(length(i) > 0){
 		zvar <- list.x[[i]]
 		zvar <- strsplit(zvar, " | ", fixed=T)[[1]][[2]]
-		if(zvar == "range"){
-			tmp <- tryCatch(df$range <- mm.df$query, error=function(e) NULL)
-		}
+##		if(zvar == "range"){
+##			tmp <- tryCatch(df$range <- mm.df$query, error=function(e) NULL)
+##		}
 	}
 	if("gt" %in% colnames(df)){
 		xyplot(x, df,
