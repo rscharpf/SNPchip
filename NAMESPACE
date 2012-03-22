@@ -1,3 +1,9 @@
+## methods
+importMethodsFrom(methods, initialize, show)
+importFrom(methods, "@<-", callNextMethod, new, validObject)
+
+importFrom(utils, packageDescription)
+
 ## lattice
 importFrom(lattice, lpolygon, lsegments, xyplot,
 	   simpleKey, panel.grid, panel.xyplot, lrect, ltext,
@@ -6,10 +12,13 @@ importFrom(lattice, lpolygon, lsegments, xyplot,
 importFrom(grid, grid.newpage, viewport, pushViewport, upViewport, dataViewport, unit)
 
 ## foreach
-importFrom(foreach, "%do%")
+import(foreach)
 
 ## IRanges
 importMethodsFrom(IRanges, as.matrix)
+
+## oligoClasses
+import(oligoClasses)
 
 export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide, centromere)
 exportMethods(xyplot, xyplot2)
