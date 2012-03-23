@@ -1,5 +1,5 @@
 dataFrameFromRange <- function(range, object, frame, range.index){
-	rm <- findOverlaps(range, featureData(object), maxgap=frame) ## RangesMatching
+	rm <- IRanges::findOverlaps(range, featureData(object), maxgap=frame) ## RangesMatching
 	mm <- as.matrix(rm)
 	mm.df <- data.frame(mm)
 	mm.df$featureNames <- featureNames(object)[mm.df$subject]

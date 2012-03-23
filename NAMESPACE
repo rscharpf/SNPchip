@@ -1,15 +1,31 @@
-## lattice
-importFrom(lattice, lpolygon, lsegments, xyplot,
-	   simpleKey, panel.grid, panel.xyplot, lrect, ltext,
-	   lpoints, panel.number, current.panel.limits)
+## methods
+importMethodsFrom(methods, initialize, show)
+importFrom(methods, "@<-", callNextMethod, new, validObject)
+
+importFrom(utils, packageDescription)
+
 ## grid
 importFrom(grid, grid.newpage, viewport, pushViewport, upViewport, dataViewport, unit)
 
+## lattice
+import(lattice)
+##importFrom(lattice, lpolygon, lsegments, xyplot,
+##	   simpleKey, panel.grid, panel.xyplot, lrect, ltext,
+##	   lpoints, panel.number, current.panel.limits)
+
 ## foreach
-importFrom(foreach, "%do%")
+import(foreach)
 
 ## IRanges
-importMethodsFrom(IRanges, as.matrix)
+import(IRanges)
+##importMethodsFrom(IRanges, as.matrix, findOverlaps)
+
+## oligoClasses
+import(oligoClasses)
+importMethodsFrom(oligoClasses, coerce, findOverlaps)
+
+## Biobase
+import(Biobase)
 
 export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide, centromere)
 exportMethods(xyplot, xyplot2)

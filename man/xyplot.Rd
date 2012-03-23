@@ -91,25 +91,30 @@ R. Scharpf
 }
 \examples{
 	## simulated data
+	library(oligoClasses)
+	library(IRanges)
+	library(VanillaICE)
 	data(oligoSetExample, package="oligoClasses")
-	if(require("VanillaICE")){
-		data(hmmResults, package="VanillaICE")
-		## to visualize each range in it's own panel surrounded by a
-		## frame of 2,000,000 bases:
-		## (here the frames are overlapping, but the method could be
-		## applied more generally to a collection of ranges from
-		## different chromsomes and samples)
-		xyplot(cn ~ x | range, data=oligoSet, range=hmmResults, frame=2e6,
-		       panel=xypanel, cex=0.5, pch=21, border="orange",
-		       scales=list(x="free"))
-		##if(require("lattice")){
-		## now the generic for xyplot in VanillaICE is masked.  To unmask,
-		##        xyplot <- VanillaICE:::xyplot
-		##%   }
-	}
+	data(hmmResults, package="VanillaICE")
+	## to visualize each range in it's own panel surrounded by a
+	## frame of 2,000,000 bases:
+	## (here the frames are overlapping, but the method could be
+	## applied more generally to a collection of ranges from
+	## different chromsomes and samples)
+	xyplot(cn~x | range, data=oligoSet,
+	       range=hmmResults,
+	       frame=2e6, panel=xypanel,
+	       cex=2,
+	       pch=".",
+	       col.het="salmon",
+	       fill.het="salmon",
+	       col.hom="royalblue",
+	       fill.hom="royalblue",
+	       state.cex=0.5,
+	       border="orange", scales=list(x="free"),
+	       par.strip.text=list(cex=0.5),
+	       xlab="Mb", ylab=expression(log[2]("copy number")))
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{dplot}
 \keyword{methods}
 

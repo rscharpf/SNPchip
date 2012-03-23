@@ -1,4 +1,4 @@
-.xyplot2 <- function(x, data, range, frame=50e3L, ...){
+.xyplot2 <- function(x, data, range, frame=50e3L, panel, ...){
 	df <- foreach(i=seq_len(nrow(range)), .combine="rbind") %do% {
 		dataFrameFromRange(range=range[i, ], object=data,
 				   frame=frame, range.index=i)
@@ -19,18 +19,20 @@
 ##		}
 	}
 	if("gt" %in% colnames(df)){
-		xyplot(x, df,
-		       range=range,
-		       id=df$id,
-		       gt=df$gt,
-		       is.snp=df$is.snp,
-		       ...)
+		lattice:::xyplot(x, df,
+				range=range,
+				id=df$id,
+				gt=df$gt,
+				is.snp=df$is.snp,
+				panel=panel,
+				...)
 	} else {
-		xyplot(x, df,
-		       id=df$id,
-		       range=range,
-		       is.snp=df$is.snp,
-		       ...)
+		lattice::xyplot(x, df,
+				id=df$id,
+				range=range,
+				is.snp=df$is.snp,
+				panel=panel,
+				...)
 	}
 }
 
@@ -95,8 +97,14 @@ xyplotOligoSnpSet <- function(x, object, ...){
 	xyplot(x, df, ...)
 }
 
+xyplotRangeInOligoSnpSet <- function(x, object, ...){
+	df <- as(object, "data.frame")
+	xyplot(x, df, ...)
+}
+
 xyplotLrrBaf <- function(rd, object, frame, ...){
 	index <- seq_len(nrow(rd))
+	i <- NULL
 	df <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd[i, ],
 			       object=object, frame=frame, range.index=i)
 	df$range <- factor(df$range, ordered=TRUE, levels=unique(df$range))
