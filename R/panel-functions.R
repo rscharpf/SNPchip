@@ -119,6 +119,11 @@ xypanelBaf <- function(x, y,
 		      adj=c(0,1), cex=state.cex, col=col.state)
 	}
 	b <- baf[subscripts]
+	rescale <- function(x, l, u){
+		b <- 1/(u-l)
+		a <- l*b
+		(x+a)/b
+	}
 	bnew <- rescale(b, ylim[1], ylim[1]+1.5)
 	lpoints(x[is.snp], bnew[is.snp],  col="blue", ...)
 }

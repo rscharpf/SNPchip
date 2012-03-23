@@ -104,6 +104,7 @@ xyplotRangeInOligoSnpSet <- function(x, object, ...){
 
 xyplotLrrBaf <- function(rd, object, frame, ...){
 	index <- seq_len(nrow(rd))
+	i <- NULL
 	df <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd[i, ],
 			       object=object, frame=frame, range.index=i)
 	df$range <- factor(df$range, ordered=TRUE, levels=unique(df$range))
