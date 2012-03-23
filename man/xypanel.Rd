@@ -5,8 +5,7 @@
 \usage{
 xypanel(x, y, gt, is.snp, range, col.hom = "grey20", fill.hom =
 "lightblue", col.het = "grey20", fill.het = "salmon", col.np = "grey20",
-fill.np = "grey60", show.state=TRUE, cex.state=1,  col.state="blue",
-cex.pch=0.3, ..., subscripts)
+fill.np = "grey60", show.state=TRUE, state.cex=1,  col.state="blue", ..., subscripts)
 }
 \arguments{
   \item{x}{Physical position in megabases.}
@@ -21,24 +20,21 @@ cex.pch=0.3, ..., subscripts)
     for homozygous genotypes.
   }
   \item{col.het}{A specification for the color of plotting symbols
-    for heterozygous genotypes.
-}
+    for heterozygous genotypes.}
   \item{fill.het}{A specification for the fill color of plotting symbols
     for heterozygous genotypes.
   }
   \item{col.np}{A specification for the color of plotting symbols
-    for nonpolymorphic markers.
-}
+    for nonpolymorphic markers.}
   \item{fill.np}{A specification for the fill color of plotting symbols
     for nonpolymorphic genotypes.
   }
   \item{show.state}{Logical.  Whether to display the predicted state in
     each panel.}
-  \item{cex.state}{Numeric.  cex for state label.  Ignored if
+  \item{state.cex}{Numeric.  \code{cex} for state label.  Ignored if
     \code{show.state} is \code{FALSE}.}
   \item{col.state}{Character. color for state label. Ignored if
     \code{show.state} is \code{FALSE}.}
-  \item{cex.pch}{\code{numeric}: relative size for plotting symbols}
   \item{\dots}{
     Additional arguments passed to lattice functions \code{xyplot},
     \code{lpoints}, and \code{lrect}.
@@ -69,21 +65,22 @@ R. Scharpf
 }
 \examples{
 \dontrun{
-if(require("crlmm")){
-	data(cnSetExample, package="crlmm")
-        cnSetExample <- chromosomePositionOrder(cnSetExample)
-	oligoSet <- as(cnSetExample, "oligoSnpSet")
-        fit2 <- hmm(oligoSet, p.hom=1)
-        xyplot(cn ~ x | range, data=oligoSet, range=fit2[1:10, ], frame=2e6,
-               panel=xypanel, cex=0.3, pch=21, border="blue",
-               scales=list(x="free"),
-               col.hom="lightblue", col.het="salmon", col.np="grey60",
-	       fill.np="grey60")
-##library(lattice)
-#### now the generic for xyplot is masked.  Must do
-##xyplot <- VanillaICE:::xyplot
-}
-
+	if(require("crlmm") && require("VanillaICE") && require("IRanges")){
+		library(oligoClasses)
+		data(cnSetExample, package="crlmm")
+		cnSetExample <- chromosomePositionOrder(cnSetExample)
+		oligoSet <- as(cnSetExample, "oligoSnpSet")
+		fit2 <- hmm(oligoSet, p.hom=1)
+		xyplot(cn ~ x | range, data=oligoSet, range=fit2[1:10, ],
+		       frame=2e6,
+		       panel=xypanel, cex=0.3, pch=21, border="blue",
+		       scales=list(x="free"),
+		       col.hom="lightblue", col.het="salmon", col.np="grey60",
+		       fill.np="grey60",
+		       xlab="Mb")
+		## if xyplot method is masked by lattice, do
+		##xyplot <- VanillaICE:::xyplot
+	}
 }
 
 }
