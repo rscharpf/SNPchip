@@ -124,8 +124,11 @@ xypanelBaf <- function(x, y,
 		a <- l*b
 		(x+a)/b
 	}
+	blim <- c(ylim[1], ylim[1]+1.5)
 	bnew <- rescale(b, ylim[1], ylim[1]+1.5)
 	lpoints(x[is.snp], bnew[is.snp],  col="blue", ...)
+	at <- c(blim[1], mean(c(blim[2], blim[1])), blim[2])
+	panel.axis("right", at=at, labels=c(0, 0.5, 1), text.col="blue", line.col="blue", half=FALSE, text.cex=0.7)
 }
 
 prepanel.fxn <- function(x,y, chr.size, ..., subscripts){
