@@ -44,6 +44,7 @@ R. Scharpf
 }
 \examples{
 library(crlmm)
+library(IRanges)
 library(VanillaICE)
 data(cnSetExample, package="crlmm")
 oligoSetList <- cnSet2oligoSetList(cnSetExample)
