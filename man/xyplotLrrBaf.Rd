@@ -52,7 +52,8 @@ fit <- hmm(oligoSetList, p.hom=0)
 ## We're interested in this range
 rangeOfInterest <- RangedDataCNV(IRanges(3.7e6, 5.9e6), chrom=8, sampleId="NA19007")
 index <- subjectHits(findOverlaps(rangeOfInterest, fit))
-xyplotLrrBaf(fit[index, ], oligoSetList[[1]], frame=1e6, panel=xypanelBaf, cex=0.2,
+xyplotLrrBaf(fit[index, ], oligoSetList[[1]], frame=1e6,
+	     panel=xypanelBaf, cex=0.2,
 	     scales=list(x=list(relation="free"),
 	     y=list(alternating=1,
 	     at=c(-1, 0, log2(3/2), log2(4/2)),
@@ -62,6 +63,8 @@ xyplotLrrBaf(fit[index, ], oligoSetList[[1]], frame=1e6, panel=xypanelBaf, cex=0
 	     col.hom="grey50",
 	     col.het="grey50",
 	     col.np="grey20",
+	     xlab="physical position (Mb)",
+	     ylab=expression(log[2]("R ratios")),
 	     key=list(text=list(c(expression(log[2]("R ratios")), expression("B allele freqencies")),
 		      col=c("grey", "blue")), columns=2))
 
