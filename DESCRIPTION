@@ -4,7 +4,7 @@ Title: Visualizations for copy number alterations
 Author: Robert Scharpf <rscharpf@jhsph.edu> and Ingo Ruczinski
 Maintainer: Robert Scharpf <rscharpf@jhsph.edu>
 Depends: R (>= 2.14.0)
-Imports: graphics, lattice, grid, foreach, IRanges, utils, methods, oligoClasses (>= 1.19.10), Biobase
+Imports: graphics, lattice, grid, foreach, IRanges, utils, methods, oligoClasses (>= 1.19.8), Biobase
 Suggests: crlmm
 Enhances: doSNOW, VanillaICE, RColorBrewer
 Description: This package defines methods for visualizing high-throughput genomic data
