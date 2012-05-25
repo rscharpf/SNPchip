@@ -111,8 +111,10 @@ xyplotLrrBaf <- function(rd, object, frame, ...){
 	if(is(rd, "GRangesList")) {
 		rd <- stack(rd)
 		index <- seq_len(length(rd))
+	} else {
+		if(is(rd, "GRanges")) index <- seq_len(length(rd))
+		if(is(rd, "RangedDataCNV")) index <- seq_len(nrow(rd))
 	}
-	if(is(rd, "RangedDataCNV")) index <- seq_len(nrow(rd))
 	i <- NULL
 	df <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd[i, ],
 			       object=object, frame=frame, range.index=i)
