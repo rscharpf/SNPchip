@@ -54,7 +54,7 @@ setMethod("xyplot2", signature(x="formula", data="CNSet", range="RangedDataCNV")
 		  if(is(range, "RangedDataCNV"))
 			  z <- findOverlaps(range, data, maxgap=frame)
 		  if(is(range, "GRanges")){
-			  frange <- oligoClasses:::makeFeatureRanges(object)
+			  frange <- oligoClasses:::makeFeatureGRanges(object)
 			  z <- findOverlaps(range, frange)
 		  }
 		  mm <- as.matrix(z)

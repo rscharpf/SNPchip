@@ -1,11 +1,11 @@
 \name{xyplot}
 \alias{xyplot}
 \alias{xyplot2}
-\alias{xyplot,formula,SnpSet-method}
+\alias{xyplot,formula,gSet-method}
 \alias{xyplot,formula,BeadStudioSet-method}
 \alias{xyplot2,formula,CNSet,RangedDataCNV-method}
-\alias{xyplot2,formula,gSet,RangedDataCNV-method}
-\alias{xyplot2,formula,SnpSet,RangedDataCNV-method}
+\alias{xyplot2,formula,gSet,ANY-method}
+\alias{xyplot2,formula,SnpSet,ANY-method}
 \title{Plot copy number and physical position for a set of genomic intervals.}
 \description{Plot copy number and physical position given by a
   \code{CNSet} object for a set of genomic intervals stored in a
@@ -66,7 +66,10 @@ xyplot2(x, data, range, frame=50e3L, ...)
   Note that users must pass a \code{RangedDataCNV} object called
   'range'.  As mentioned previously, it can be helpful to pass an
   integer called 'frame' that indicates how much contextual data we
-  should plot surrounding each genomic interval.
+  should plot surrounding each genomic interval. In future iterations,
+  \code{RangedDataCNV} will likely be deprecated in favor of
+  \code{GRanges}.
+
 
   If the \code{lattice} package is loaded after loading
   \code{VanillaICE}, the generic definition for \code{xyplot} in

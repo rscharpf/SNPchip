@@ -3,7 +3,7 @@ dataFrameFromRange <- function(range, object, frame, range.index){
 		rm <- IRanges::findOverlaps(range, featureData(object), maxgap=frame) ## RangesMatching
 		sample.index <- match(sampleNames(range), sampleNames(object))
 	} else {
-		frange <- oligoClasses::makeFeatureRanges(object)
+		frange <- oligoClasses::makeFeatureGRanges(object)
 		rm <- IRanges::findOverlaps(range, frange, maxgap=frame)
 		sample.index <- match(sampleNames(range), sampleNames(object))
 	}
