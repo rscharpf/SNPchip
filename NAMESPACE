@@ -17,8 +17,9 @@ import(lattice)
 import(foreach)
 
 ## IRanges
-import(IRanges)
+##import(IRanges)
 ##importMethodsFrom(IRanges, as.matrix, findOverlaps)
+import(GenomicRanges)
 
 ## oligoClasses
 import(oligoClasses)

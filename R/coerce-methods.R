@@ -1,4 +1,5 @@
-dataFrameFromRange <- function(range, object, frame, range.index){
+dataFrameFromRange <- function(range, object, frame=0L, range.index=1L){
+	## to do: change to S4 method and do dispatch on class of range
 	if(is(range, "RangedDataCNV")){
 		rm <- IRanges::findOverlaps(range, featureData(object), maxgap=frame) ## RangesMatching
 		sample.index <- match(sampleNames(range), sampleNames(object))
@@ -9,9 +10,9 @@ dataFrameFromRange <- function(range, object, frame, range.index){
 	}
 	if(any(is.na(sample.index))) stop("sampleNames in RangedData do not match sampleNames in ", class(data), " object")
 	sample.index <- unique(sample.index)
-	mm <- as.matrix(rm)
+	mm <- IRanges::as.matrix(rm)
 	mm.df <- data.frame(mm)
-	mm.df$featureNames <- featureNames(object)[mm.df$subject]
+	mm.df$featureNames <- Biobase::featureNames(object)[mm.df$subject]
 	marker.index <- mm.df$subject
 	obj <- object[marker.index, sample.index]
 	mm.df$subject <- match(mm.df$featureNames, featureNames(obj))
@@ -22,6 +23,11 @@ dataFrameFromRange <- function(range, object, frame, range.index){
 	##df$range <- rep(i, nrow(df))##mm.df$query
 	##dfList[[i]] <- df
 	##df$range <- range.index
-	df$range <- paste("[", range.index, "] chr ", chromosome(range), ", ID: ", sampleNames(obj), sep="")
+	if(is(range, "RangedDataCNV")){
+		df$range <- paste("[", range.index, "] chr", chromosome(range), ", ID: ", sampleNames(obj), sep="")
+	}
+	if(is(range, "GRanges")){
+		df$range <- paste("[", range.index, "] ", chromosome(range), ", ID: ", sampleNames(obj), sep="")
+	}
 	return(df)
 }
