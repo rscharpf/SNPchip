@@ -1,5 +1,6 @@
 dataFrameFromRange <- function(range, object, frame=0L, range.index=1L){
 	## to do: change to S4 method and do dispatch on class of range
+	if(missing(frame)) frame <- 200e3
 	if(is(range, "RangedDataCNV")){
 		rm <- IRanges::findOverlaps(range, featureData(object), maxgap=frame) ## RangesMatching
 		sample.index <- match(sampleNames(range), sampleNames(object))
