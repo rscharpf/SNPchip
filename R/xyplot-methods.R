@@ -115,6 +115,7 @@ xyplotLrrBaf <- function(rd, object, frame, ...){
 		if(is(rd, "GRanges")) index <- seq_len(length(rd))
 		if(is(rd, "RangedDataCNV")) index <- seq_len(nrow(rd))
 	}
+	if(any(is.na(position(object)))) stop("NA values not permitted in position(object)")
 	i <- NULL
 	df <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd[i, ],
 			       object=object, frame=frame, range.index=i)
