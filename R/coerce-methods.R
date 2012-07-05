@@ -3,12 +3,13 @@ dataFrameFromRange <- function(range, object, frame=0L, range.index=1L){
 	if(missing(frame)) frame <- 200e3
 	if(is(range, "RangedDataCNV")){
 		rm <- IRanges::findOverlaps(range, featureData(object), maxgap=frame) ## RangesMatching
-		sample.index <- match(sampleNames(range), sampleNames(object))
 	} else {
 		frange <- oligoClasses::makeFeatureGRanges(object)
 		rm <- IRanges::findOverlaps(range, frange, maxgap=frame)
-		sample.index <- match(sampleNames(range), sampleNames(object))
 	}
+	if(length(sampleNames(range))==0) {
+		sample.index <- seq_len(ncol(object))
+	} else  sample.index <- match(sampleNames(range), sampleNames(object))
 	if(any(is.na(sample.index))) stop("sampleNames in RangedData do not match sampleNames in ", class(data), " object")
 	sample.index <- unique(sample.index)
 	mm <- IRanges::as.matrix(rm)
