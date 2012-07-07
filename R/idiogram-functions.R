@@ -112,7 +112,18 @@ chromosomeSize <- function(chromosome, build="hg18", verbose=FALSE){
 	}
 }
 
+cleanname <- function(chromosome){
+	if(is.numeric(chromosome)) {
+		chromosome <- paste("chr",integer2chromosome(chromosome), sep="")
+	} else {
+		x <- strsplit(chromosome, "chr")[[1]]
+		if(length(x)==1) chromosome <- paste("chr", x, sep="")
+	}
+	return(chromosome)
+}
+
 plotIdiogram <- function(chromosome,
+			 build,
                          cytoband,
 			 cytoband.ycoords,
                          xlim,
@@ -125,29 +136,29 @@ plotIdiogram <- function(chromosome,
                          outer=FALSE,
 			 taper=0.15,
 			 verbose=FALSE,
-			 build="hg18",
 			 unit=c("bp", "Mb"),
 			 is.lattice=FALSE,
                          ...){
 	##def.par <- par(no.readonly=TRUE)
 	##on.exit(def.par)
+	if(missing(build)) stop("must specify genome build")
 	if(is.lattice){
 		segments <- lsegments
 		polygon <- lpolygon
 	}
 	if(missing(cytoband)){
-		if(verbose) message(paste("Cytoband annotation obtained from build", build))
-		pathto <- system.file("hg18", package="SNPchip")
-		cytoband <- read.table(file.path(pathto, "cytoBand.txt"), as.is=TRUE)
+		pathto <- system.file("extdata", package="SNPchip")
+		if(verbose) message("Reading cytoband annotation for UCSC genome build ", build)
+		cytoband <- read.table(file.path(pathto, paste("cytoBand_", build, ".txt", sep="")), as.is=TRUE)
 		colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
-		##data(cytoband, package="SNPchip", envir=environment())
 	}
-	if(missing(chromosome)){
+	if(!missing(chromosome)){
+		chromosome <- cleanname(chromosome)
+	} else {
 		if(length(unique(cytoband[, "chrom"])) > 1) stop("Must specify chromosome")
 	}
-	if(length(unique(cytoband$chrom)) > 1){
-		cytoband <- cytoband[cytoband[, "chrom"] == paste("chr", chromosome, sep=""), ]
-	}
+	##if(length(unique(cytoband$chrom)) > 1){
+	cytoband <- cytoband[cytoband[, "chrom"] == chromosome, ]
 	unit <- match.arg(unit)
 	if(unit=="Mb"){
 		cytoband$start <- cytoband$start/1e6
@@ -157,7 +168,8 @@ plotIdiogram <- function(chromosome,
 		cytoband.ycoords <- ylim
 	}
 	rownames(cytoband) <- as.character(cytoband[, "name"])
-	if(missing(xlim)) xlim <- c(0, chromosomeSize(unique(cytoband$chrom)))
+	sl <- getSequenceLengths(build)[chromosome]
+	if(missing(xlim)) xlim <- c(0, sl)
 	if(unit=="Mb") xlim <- xlim/1e6
 	cytoband_p <- cytoband[grep("^p", rownames(cytoband), value=TRUE), ]
 	cytoband_q <- cytoband[grep("^q", rownames(cytoband), value=TRUE), ]
