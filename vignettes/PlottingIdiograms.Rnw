@@ -33,10 +33,47 @@
 library(SNPchip)
 @
 
-Plot an idiogram for chromosome 1.
+Plot an idiogram for chromosome 1 with labels for the bands on the x-axis.
 
 <<label=chr1, fig=TRUE, include=TRUE, width=12, height=2, results=hide>>=
-plotIdiogram("1", cex=0.8)
+plotIdiogram("1", build="hg19", cex=0.8)
 @
+
+Suppressing labels:
+
+<<label=chr1NoLabels, fig=TRUE, include=TRUE, width=12, height=2, results=hide>>=
+plotIdiogram("1", build="hg19", cex=0.8, label.cytoband=FALSE)
+@
+
+With user-definded y-axis limits and y-coordinates for the idiogram:
+
+
+<<label=differentCoordinates, fig=TRUE, include=TRUE, width=12, height=2, results=hide>>=
+plotIdiogram("1", build="hg19", cex=0.8, label.cytoband=FALSE, ylim=c(0,1), cytoband.ycoords=c(0.1, 0.3))
+@
+
+Plot an idiogram for all chromosomes.
+
+<<allchrom,fig=TRUE,include=TRUE, width=10, height=6>>=
+library(oligoClasses)
+sl <- getSequenceLengths("hg19")[c(paste("chr", 1:22, sep=""), "chrX", "chrY")]
+ybottom <- seq(0, 1, length.out=length(sl)) - 0.01
+ytop <- seq(0, 1, length.out=length(sl)) + 0.01
+for(i in seq_along(sl)){
+	chr <- names(sl)[i]
+	if(i == 1){
+		plotIdiogram("1", build="hg19", cex=0.8, label.cytoband=FALSE, ylim=c(-0.05,1.05), cytoband.ycoords=c(ybottom[1], ytop[1]),
+			     xlim=c(0, max(sl)))
+	}
+	if(i > 1){
+		plotIdiogram(names(sl)[i], build="hg19", cex=0.8, label.cytoband=FALSE, cytoband.ycoords=c(ybottom[i], ytop[i]), new=FALSE)
+	}
+}
+axis(1, at=pretty(c(0, max(sl)), n=10), labels=pretty(c(0, max(sl)), n=10)/1e6, cex.axis=0.8)
+mtext("position (Mb)", 1, line=2)
+par(las=1)
+axis(2, at=ybottom+0.01, names(sl), cex.axis=0.6)
+@
+
 
 \end{document}

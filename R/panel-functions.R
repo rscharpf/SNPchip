@@ -97,7 +97,8 @@ xypanelBaf <- function(x, y,
 		       state.cex=1,
 		       col.state="blue",
 		       ..., subscripts){
-	panel.grid(v=0, h=4, "grey", lty=2)
+	##panel.grid(v=0, h=4, "grey", lty=2)
+	panel.abline(h=c(-1, 0, log2(3/2), log2(4/2)), col="grey", lty=2)
 	panel.xyplot(x[1], y[1], col="white", ...) ## set it up, but don't plot
 	is.snp <- is.snp[subscripts]
 	ylim <- current.panel.limits()$ylim
@@ -124,8 +125,11 @@ xypanelBaf <- function(x, y,
 		a <- l*b
 		(x+a)/b
 	}
+	blim <- c(ylim[1], ylim[1]+1.5)
 	bnew <- rescale(b, ylim[1], ylim[1]+1.5)
 	lpoints(x[is.snp], bnew[is.snp],  col="blue", ...)
+	at <- c(blim[1], mean(c(blim[2], blim[1])), blim[2])
+	panel.axis("right", at=at, labels=c(0, 0.5, 1), text.col="blue", line.col="blue", half=FALSE, text.cex=0.7)
 }
 
 prepanel.fxn <- function(x,y, chr.size, ..., subscripts){

@@ -1,33 +1,23 @@
-centromere <- function(chromosome, build="hg18", verbose=FALSE){
+centromere <- function(chromosome, build, verbose=FALSE){
+	chr <- cleanname(chromosome)
+	if(missing(build)) stop("UCSC genome build must be specified (hg18 or hg19 supported)")
+	if(!build %in% c("hg18", "hg19")) stop("Only hg18 and hg19 UCSC builds supported")
 	if(verbose)  message(paste("centromere coordinates based on build", build))
-	if(missing(chromosome) | !(chromosome %in% c(1:22, "X"))) stop("must specify chromosome 1-22, or X as character string")
-	pathto <- system.file(build, package="SNPchip")
-	tmp <- read.table(file.path(pathto, "centromeres.txt"), as.is=TRUE)
-	as.integer(tmp[paste("chr", chromosome, sep=""), ])
+	pathto <- system.file("extdata", package="SNPchip")
+	gaps <- readRDS(file.path(pathto, paste("gap_", build, ".rda", sep="")))
+	if(!chr %in% chromosome(gaps)) stop(paste("arg chromosome must be one of ", chromosome(gaps)), sep="")
+	gap <- gaps[match(chr, chromosome(gaps)), ]
+	c(start(gap), end(gap))
 }
 
 
-chromosomeSize <- function(chromosome, build="hg18", verbose=FALSE){
-	if(verbose) message(paste("chromosome size using build", build))
-	if(!is.character(chromosome)) stop("argument to chromosomeSize must be one of the following character strings: 1, ..., 22, X, or Y")
-	if(length(grep("chr", chromosome)) == 0) chromosome <- paste("chr", chromosome, sep="")
-	if(any(!(chromosome %in% paste("chr", c(1:22, "X", "Y", "XY", "M"), sep="")))) stop("chromosome must be chr1-22, chrX, chrY, or chrM")
-	pathto <- system.file(build, package="SNPchip")
-	tmp <- read.table(file.path(pathto, "chromInfo.txt"), as.is=TRUE, row.names=1)
-	##data(chromosomeAnnotation, package="SNPchip", envir=environment())
-	tmp[chromosome, 1]
+chromosomeSize <- function(chromosome, build, verbose=FALSE){
+	if(missing(build)) stop("UCSC genome build must be specified (hg18 or hg19 supported)")
+	chromosome <- cleanname(chromosome)
+	getSequenceLengths(build)[chromosome]
 }
 
-.getCytoband <- function(object, op){
-	##browser()
-	if(op$add.cytoband){
-		##data(cytoband)
-		pathto <- system.file("hg18", package="SNPchip")
-		cytoband <- read.table(file.path(pathto, "cytoBand.txt"), as.is=TRUE)
-		colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
-		cytoband <- cytoband[cytoband[, "chrom"] == paste("chr", unique(chromosome(object)), sep=""), ]
-	}  else NULL
-}
+
 
 .drawCytobandWrapper <- function(S, cytoband, op, j, chromosomeName){
 	if(!op$add.cytoband) return()
@@ -112,7 +102,18 @@ chromosomeSize <- function(chromosome, build="hg18", verbose=FALSE){
 	}
 }
 
+cleanname <- function(chromosome){
+	if(is.numeric(chromosome)) {
+		chromosome <- paste("chr",integer2chromosome(chromosome), sep="")
+	} else {
+		x <- strsplit(chromosome, "chr")[[1]]
+		if(length(x)==1) chromosome <- paste("chr", x, sep="")
+	}
+	return(chromosome)
+}
+
 plotIdiogram <- function(chromosome,
+			 build,
                          cytoband,
 			 cytoband.ycoords,
                          xlim,
@@ -125,29 +126,29 @@ plotIdiogram <- function(chromosome,
                          outer=FALSE,
 			 taper=0.15,
 			 verbose=FALSE,
-			 build="hg18",
 			 unit=c("bp", "Mb"),
 			 is.lattice=FALSE,
                          ...){
 	##def.par <- par(no.readonly=TRUE)
 	##on.exit(def.par)
+	if(missing(build)) stop("must specify genome build")
 	if(is.lattice){
 		segments <- lsegments
 		polygon <- lpolygon
 	}
 	if(missing(cytoband)){
-		if(verbose) message(paste("Cytoband annotation obtained from build", build))
-		pathto <- system.file("hg18", package="SNPchip")
-		cytoband <- read.table(file.path(pathto, "cytoBand.txt"), as.is=TRUE)
+		pathto <- system.file("extdata", package="SNPchip")
+		if(verbose) message("Reading cytoband annotation for UCSC genome build ", build)
+		cytoband <- read.table(file.path(pathto, paste("cytoBand_", build, ".txt", sep="")), as.is=TRUE)
 		colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
-		##data(cytoband, package="SNPchip", envir=environment())
 	}
-	if(missing(chromosome)){
+	if(!missing(chromosome)){
+		chromosome <- cleanname(chromosome)
+	} else {
 		if(length(unique(cytoband[, "chrom"])) > 1) stop("Must specify chromosome")
 	}
-	if(length(unique(cytoband$chrom)) > 1){
-		cytoband <- cytoband[cytoband[, "chrom"] == paste("chr", chromosome, sep=""), ]
-	}
+	##if(length(unique(cytoband$chrom)) > 1){
+	cytoband <- cytoband[cytoband[, "chrom"] == chromosome, ]
 	unit <- match.arg(unit)
 	if(unit=="Mb"){
 		cytoband$start <- cytoband$start/1e6
@@ -157,7 +158,8 @@ plotIdiogram <- function(chromosome,
 		cytoband.ycoords <- ylim
 	}
 	rownames(cytoband) <- as.character(cytoband[, "name"])
-	if(missing(xlim)) xlim <- c(0, chromosomeSize(unique(cytoband$chrom)))
+	sl <- getSequenceLengths(build)[chromosome]
+	if(missing(xlim)) xlim <- c(0, sl)
 	if(unit=="Mb") xlim <- xlim/1e6
 	cytoband_p <- cytoband[grep("^p", rownames(cytoband), value=TRUE), ]
 	cytoband_q <- cytoband[grep("^q", rownames(cytoband), value=TRUE), ]

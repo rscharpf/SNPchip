@@ -17,8 +17,9 @@ import(lattice)
 import(foreach)
 
 ## IRanges
-import(IRanges)
+##import(IRanges)
 ##importMethodsFrom(IRanges, as.matrix, findOverlaps)
+import(GenomicRanges)
 
 ## oligoClasses
 import(oligoClasses)
@@ -27,6 +28,7 @@ importMethodsFrom(oligoClasses, coerce, findOverlaps)
 ## Biobase
 import(Biobase)
 
-export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide, centromere)
+export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide, centromere,
+       xyplotLrrBaf, xypanelBaf)
 exportMethods(xyplot, xyplot2)
 

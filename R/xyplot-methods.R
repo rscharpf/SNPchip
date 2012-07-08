@@ -1,5 +1,6 @@
 .xyplot2 <- function(x, data, range, frame=50e3L, panel, ...){
-	df <- foreach(i=seq_len(nrow(range)), .combine="rbind") %do% {
+	L <- length(start(range))
+	df <- foreach(i=seq_len(L), .combine="rbind") %do% {
 		dataFrameFromRange(range=range[i, ], object=data,
 				   frame=frame, range.index=i)
 	}
@@ -37,31 +38,25 @@
 }
 
 setMethod("xyplot2", signature(x="formula",
-			       data="gSet",
-			       range="RangedDataCNV"),
+			       data="gSet"),
 	  function(x, data, range, frame=50e3L, ...){
 		  .xyplot2(x=x, data=data, range=range, frame=frame, ...)
 	  })
 
 setMethod("xyplot2", signature(x="formula",
-			       data="SnpSet",
-			       range="RangedDataCNV"),
+			       data="SnpSet"),
 	  function(x, data, range, frame=50e3L, ...){
 		  .xyplot2(x=x, data=data, range=range, frame=frame, ...)
 	  })
 
-setMethod("xyplot", signature(x="formula", data="BeadStudioSet"),
-	  function(x, data, ...){
-		  if("range" %in% names(list(...))){
-			  xyplot2(x, data, ...)
-		  } else {
-			  callNextMethod()
-		  }
-})
-
 setMethod("xyplot2", signature(x="formula", data="CNSet", range="RangedDataCNV"),
 	  function(x, data, range, frame=50e3L, ...){
-		  z <- findOverlaps(range, data, maxgap=frame)
+		  if(is(range, "RangedDataCNV"))
+			  z <- findOverlaps(range, data, maxgap=frame)
+		  if(is(range, "GRanges")){
+			  frange <- oligoClasses:::makeFeatureGRanges(object)
+			  z <- findOverlaps(range, frange)
+		  }
 		  mm <- as.matrix(z)
 		  mm.df <- data.frame(mm)
 		  mm.df$featureNames <- featureNames(data)[mm.df$subject]
@@ -83,9 +78,19 @@ setMethod("xyplot2", signature(x="formula", data="CNSet", range="RangedDataCNV")
 			 ...)
 	  })
 
-setMethod("xyplot", signature(x="formula", data="SnpSet"),
+setMethod("xyplot", signature(x="formula", data="BeadStudioSet"),
 	  function(x, data, ...){
 		  if("range" %in% names(list(...))){
+			  xyplot2(x, data, ...)
+		  } else {
+			  callNextMethod()
+		  }
+})
+
+setMethod("xyplot", signature(x="formula", data="gSet"),
+	  function(x, data, ...){
+		  if("range" %in% names(list(...))){
+			  ##if(is(list(...)[["range"]], "RangedDataCNV"))
 			  xyplot2(x, data, ...)
 		  } else {
 			  callNextMethod()
@@ -103,7 +108,14 @@ xyplotRangeInOligoSnpSet <- function(x, object, ...){
 }
 
 xyplotLrrBaf <- function(rd, object, frame, ...){
-	index <- seq_len(nrow(rd))
+	if(is(rd, "GRangesList")) {
+		rd <- stack(rd)
+		index <- seq_len(length(rd))
+	} else {
+		if(is(rd, "GRanges")) index <- seq_len(length(rd))
+		if(is(rd, "RangedDataCNV")) index <- seq_len(nrow(rd))
+	}
+	if(any(is.na(position(object)))) stop("NA values not permitted in position(object)")
 	i <- NULL
 	df <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd[i, ],
 			       object=object, frame=frame, range.index=i)
