@@ -4,11 +4,11 @@ test_coercion <- function(){
 	data(hmmResults, package="VanillaICE")
 	data(oligoSetExample, package="oligoClasses")
 	## coerce from RangedDataHMM
-	dataFrame <- SNPchip:::dataFrameFromRange(hmmResults[1,], object=oligoSet)
+	dataFrame <- SNPchip:::dataFrameFromRange(hmmResults[1,], object=oligoSet, frame=0)
 	checkEquals(996L, nrow(dataFrame))
 	## coerce from GRanges
 	gr <- oligoClasses:::coerceToGRanges(hmmResults, build="hg19")
-	dataFrame2 <- SNPchip:::dataFrameFromRange(gr[1,], object=oligoSet)
+	dataFrame2 <- SNPchip:::dataFrameFromRange(gr[1,], object=oligoSet, frame=0)
 	checkEquals(dataFrame, dataFrame2)
 }
 test_xyplot <- function(){
