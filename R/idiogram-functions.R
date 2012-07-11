@@ -292,3 +292,132 @@ plotIdiogram <- function(chromosome,
 
 plotCytoband <- function(...) .Deprecated("plotCytoband is deprecated. Use plotIdiogram instead.")
 
+plotCytoband2 <- function(chromosome,
+			  build,
+			  cytoband,
+			  xlim,
+			  xaxs="r",
+			  new=TRUE,
+			  label.cytoband=TRUE,
+			  cex.axis=1,
+			  outer=FALSE,
+			  ...){
+	def.par <- par(no.readonly=TRUE, mar=c(4.1, 0.1, 3.1, 2.1))
+	on.exit(def.par)
+	if(missing(build)) stop("must specify genome build")
+##	if(is.lattice){
+##		segments <- lsegments
+##		polygon <- lpolygon
+##	}
+	if(missing(cytoband)){
+		pathto <- system.file("extdata", package="SNPchip")
+		if(verbose) message("Reading cytoband annotation for UCSC genome build ", build)
+		cytoband <- read.table(file.path(pathto, paste("cytoBand_", build, ".txt", sep="")), as.is=TRUE)
+		colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
+	}
+	if(!missing(chromosome)){
+		chromosome <- cleanname(chromosome)
+	} else stop("must specify chromosome")
+	cytoband <- cytoband[cytoband[, "chrom"] == chromosome, ]
+	rownames(cytoband) <- as.character(cytoband[, "name"])
+	sl <- getSequenceLengths(build)[chromosome]
+	if(missing(xlim)) xlim <- c(0, sl)
+	cytoband_p <- cytoband[grep("^p", rownames(cytoband), value=TRUE), ]
+	cytoband_q <- cytoband[grep("^q", rownames(cytoband), value=TRUE), ]
+
+	p.bands <- nrow(cytoband_p)
+	cut.left  <- c()
+	cut.right <- c()
+	##  1st  band of arm or 1st  band after  "stalk"
+	##  last band of arm or last band before "stalk"
+	for (i in 1:nrow(cytoband)) {
+		if (i == 1) { cut.left[i] <- TRUE; cut.right[i] <- FALSE} else
+		if (i == p.bands) { cut.left[i] <- FALSE; cut.right[i] <- TRUE} else
+		if (i == (p.bands+1)) { cut.left[i] <- TRUE; cut.right[i] <- FALSE} else
+		if (i == nrow(cytoband)) { cut.left[i] <- FALSE; cut.right[i] <- TRUE} else{
+			cut.left[i] <- FALSE; cut.right[i] <- FALSE
+		}
+	}
+	for (i in 1:nrow(cytoband)) {
+		if (as.character(cytoband[i, "gieStain"]) == "stalk") {
+			cut.right[i-1] <- TRUE
+			cut.left[i] <- NA
+			cut.right[i] <- NA
+			cut.left[i+1] <- TRUE
+		}
+	}
+	##When plotting subregions of a chromosome, this prevents the cytobands from extending beyond the subsetted object
+	##exclude cytobands that end before the minimum plotting limits
+	include <- cytoband[, "end"] > xlim[1] & cytoband[, "start"] < xlim[2]
+	cytoband <- cytoband[include, ]
+	cut.left <- cut.left[include]
+	cut.right <- cut.right[include]
+	if(new){
+		plot(c(0, cytoband[nrow(cytoband), "end"]),
+		     c(0, 2),
+		     xlim=xlim,
+		     type="n",
+		     xlab="",
+		     ylab="",
+		     axes=FALSE,
+		     xaxs=xaxs,
+		     ...)
+	}
+	for (i in 1:nrow(cytoband)) {
+		start <- cytoband[i, "start"]
+		last   <- cytoband[i, "end"]
+		delta = (last-start)/4
+		getStain <- function(stain){
+			switch(stain,
+			       gneg="grey100",
+			       gpos25="grey90",
+			       gpos50="grey70",
+			       gpos75="grey40",
+			       gpos100="grey0",
+			       gvar="grey100",
+			       stalk="brown3",
+			       acen="brown4",
+			       "white")
+		}
+		color <- getStain(as.character(cytoband[i, "gieStain"]))
+		if (is.na(cut.left[i]) & is.na(cut.right[i])) {
+			## this is a "stalk", do not draw box. Draw two vertical lines instead
+			delta <- (last-start)/3
+			lines(c(start+delta, start+delta), c(0,2), col=color)
+			lines(c(last-delta, last-delta), c(0,2), col=color)
+		} else if (cut.left[i] & cut.right[i]) {      # cut both lasts
+			polygon(c(start, start+delta, last-delta, last, last, last-delta, start+delta, start),
+				c(0.3, 0, 0, 0.3, 1.7, 2, 2, 1.7), col=color)
+		} else if (cut.left[i]) {              # cut left last only
+			polygon(c(start, start+delta, last, last, start+delta, start),
+				c(0.3, 0, 0, 2, 2, 1.7), col=color)
+		} else if (cut.right[i]) {             # cut right last only
+			polygon(c(start, last-delta, last, last, last-delta, start),
+				c(0, 0, 0.3, 1.7, 2, 2),col=color)
+		} else {
+			polygon(c(start, last, last, start),
+				c(0, 0, 2, 2), col=color)
+		}
+	}
+	my.x <- (cytoband$start+cytoband$end)/2
+	if(label.cytoband){
+		axis(1, at=my.x,
+		     labels=rownames(cytoband),
+		     outer=outer,
+		     cex.axis=cex.axis,
+		     line=1, las=3, tick=FALSE)
+		axis(1, at=cytoband$start,
+		     outer=outer,
+		     cex.axis=cex.axis,
+		     line=1, las=3, label=FALSE)
+	}
+	return()
+}
+
+getCytoband <- function(build){
+	path <- system.file("extdata", package="SNPchip")
+	build <- "hg19"
+	cytoband <- read.table(file.path(path, paste("cytoBand_", build, ".txt", sep="")), as.is=TRUE, header=FALSE)
+	colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
+	return(cytoband)
+}
