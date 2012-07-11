@@ -29,6 +29,6 @@ importMethodsFrom(oligoClasses, coerce, findOverlaps)
 import(Biobase)
 
 export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide, centromere,
-       xyplotLrrBaf, xypanelBaf)
+       xyplotLrrBaf, xypanelBaf, plotCytoband2, getCytoband)
 exportMethods(xyplot, xyplot2)
 
