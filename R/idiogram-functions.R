@@ -301,6 +301,7 @@ plotCytoband2 <- function(chromosome,
 			  label.cytoband=TRUE,
 			  cex.axis=1,
 			  outer=FALSE,
+			  verbose=TRUE,
 			  ...){
 	def.par <- par(no.readonly=TRUE, mar=c(4.1, 0.1, 3.1, 2.1))
 	on.exit(def.par)
@@ -416,7 +417,7 @@ plotCytoband2 <- function(chromosome,
 
 getCytoband <- function(build){
 	path <- system.file("extdata", package="SNPchip")
-	build <- "hg19"
+	if (missing(build)) build <- "hg19"
 	cytoband <- read.table(file.path(path, paste("cytoBand_", build, ".txt", sep="")), as.is=TRUE, header=FALSE)
 	colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
 	return(cytoband)
