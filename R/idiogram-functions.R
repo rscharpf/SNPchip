@@ -131,23 +131,19 @@ plotIdiogram <- function(chromosome,
                          ...){
 	##def.par <- par(no.readonly=TRUE)
 	##on.exit(def.par)
+	def.par <- par(no.readonly=TRUE, mar=c(4.1, 0.1, 3.1, 2.1))
+	on.exit(def.par)
 	if(missing(build)) stop("must specify genome build")
 	if(is.lattice){
 		segments <- lsegments
 		polygon <- lpolygon
 	}
-	if(missing(cytoband)){
-		pathto <- system.file("extdata", package="SNPchip")
-		if(verbose) message("Reading cytoband annotation for UCSC genome build ", build)
-		cytoband <- read.table(file.path(pathto, paste("cytoBand_", build, ".txt", sep="")), as.is=TRUE)
-		colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
-	}
+	if(missing(cytoband)) cytoband <- getCytoband(build)
 	if(!missing(chromosome)){
 		chromosome <- cleanname(chromosome)
 	} else {
 		if(length(unique(cytoband[, "chrom"])) > 1) stop("Must specify chromosome")
 	}
-	##if(length(unique(cytoband$chrom)) > 1){
 	cytoband <- cytoband[cytoband[, "chrom"] == chromosome, ]
 	unit <- match.arg(unit)
 	if(unit=="Mb"){
@@ -169,7 +165,7 @@ plotIdiogram <- function(chromosome,
 	cut.right <- c()
 	##  1st  band of arm or 1st  band after  "stalk"
 	##  last band of arm or last band before "stalk"
-	for (i in 1:nrow(cytoband)) {
+	for (i in seq_len(nrow(cytoband))) {
 		if (i == 1)                             { cut.left[i] <- TRUE; cut.right[i] <- FALSE} else
 		if (i == p.bands)                       { cut.left[i] <- FALSE; cut.right[i] <- TRUE} else
 		if (i == (p.bands+1))                   { cut.left[i] <- TRUE; cut.right[i] <- FALSE} else
@@ -177,7 +173,7 @@ plotIdiogram <- function(chromosome,
 			cut.left[i] <- FALSE; cut.right[i] <- FALSE
 		}
 	}
-	for (i in 1:nrow(cytoband)) {
+	for (i in seq_len(nrow(cytoband))) {
 		if (as.character(cytoband[i, "gieStain"]) == "stalk") {
 			cut.right[i-1] <- TRUE
 			cut.left[i] <- NA
@@ -193,8 +189,8 @@ plotIdiogram <- function(chromosome,
 	include <- cytoband[, "end"] > xlim[1] & cytoband[, "start"] < xlim[2]
 	cytoband <- cytoband[include, ]
 	N <- nrow(cytoband)
-	cytoband[N, "end"] <- min(xlim[2], cytoband[N, "end"])
-	cytoband[1, "start"] <- max(xlim[1], cytoband[1, "start"])
+##	cytoband[N, "end"] <- min(xlim[2], cytoband[N, "end"])
+##	cytoband[1, "start"] <- max(xlim[1], cytoband[1, "start"])
 	cut.left <- cut.left[include]
 	cut.right <- cut.right[include]
 	if(new){
@@ -238,11 +234,7 @@ plotIdiogram <- function(chromosome,
 			delta <- (last-start)/3
 			segments(start+delta, cytoband.ycoords[1], start+delta, cytoband.ycoords[2])
 			segments(last-delta, cytoband.ycoords[1], last-delta, cytoband.ycoords[2])
-##			lines(c(start+delta, start+delta), ylim, col=color)
-##			lines(c(last-delta, last-delta), ylim, col=color)
 		} else if (cut.left[i] & cut.right[i]) {      # cut both lasts
-##			polygon(c(start, start+delta, last-delta, last, last, last-delta, start+delta, start),
-##				c(0.3, 0, 0, 0.3, 1.7, 2, 2, 1.7), col=color)
 			##Taper both ends
 			yy <- c(bot + p*h, bot, bot, bot + p*h, top - p*h, top, top, top - p*h)
 			polygon(c(start, start+delta, last-delta, last, last, last-delta, start+delta, start),
@@ -273,7 +265,11 @@ plotIdiogram <- function(chromosome,
 			     outer=outer,
 			     cex.axis=cex.axis,
 			     line=1,
-			     las=3)
+			     las=3, tick=FALSE)
+			axis(1, at=cytoband$start,
+			     outer=outer,
+			     cex.axis=cex.axis,
+			     line=1, las=3, label=FALSE)
 		} else{
 			##put cytoband labels at height label.y
 			if(!is.numeric(label.y)){
@@ -310,15 +306,10 @@ plotCytoband2 <- function(chromosome,
 ##		segments <- lsegments
 ##		polygon <- lpolygon
 ##	}
-	if(missing(cytoband)){
-		pathto <- system.file("extdata", package="SNPchip")
-		if(verbose) message("Reading cytoband annotation for UCSC genome build ", build)
-		cytoband <- read.table(file.path(pathto, paste("cytoBand_", build, ".txt", sep="")), as.is=TRUE)
-		colnames(cytoband) <- c("chrom", "start", "end", "name", "gieStain")
-	}
+	if(missing(cytoband)) cytoband <- getCytoband(build)
 	if(!missing(chromosome)){
 		chromosome <- cleanname(chromosome)
-	} else stop("must specify chromosome")
+	} else 	if(length(unique(cytoband[, "chrom"])) > 1) stop("Must specify chromosome")
 	cytoband <- cytoband[cytoband[, "chrom"] == chromosome, ]
 	rownames(cytoband) <- as.character(cytoband[, "name"])
 	sl <- getSequenceLengths(build)[chromosome]
@@ -331,7 +322,7 @@ plotCytoband2 <- function(chromosome,
 	cut.right <- c()
 	##  1st  band of arm or 1st  band after  "stalk"
 	##  last band of arm or last band before "stalk"
-	for (i in 1:nrow(cytoband)) {
+	for (i in seq_len(nrow(cytoband))) {
 		if (i == 1) { cut.left[i] <- TRUE; cut.right[i] <- FALSE} else
 		if (i == p.bands) { cut.left[i] <- FALSE; cut.right[i] <- TRUE} else
 		if (i == (p.bands+1)) { cut.left[i] <- TRUE; cut.right[i] <- FALSE} else
