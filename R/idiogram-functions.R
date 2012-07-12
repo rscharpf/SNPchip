@@ -269,7 +269,7 @@ plotIdiogram <- function(chromosome,
 			axis(1, at=cytoband$start,
 			     outer=outer,
 			     cex.axis=cex.axis,
-			     line=1, las=3, label=FALSE)
+			     line=1, las=3, labels=FALSE)
 		} else{
 			##put cytoband labels at height label.y
 			if(!is.numeric(label.y)){
@@ -401,7 +401,7 @@ plotCytoband2 <- function(chromosome,
 		axis(1, at=cytoband$start,
 		     outer=outer,
 		     cex.axis=cex.axis,
-		     line=1, las=3, label=FALSE)
+		     line=1, las=3, labels=FALSE)
 	}
 	return()
 }

@@ -1,5 +1,6 @@
 \name{plotIdiogram}
 \alias{plotIdiogram}
+\alias{plotCytoband2}
 \title{Plots idiogram for one chromosome}
 
 \description{ Draw an idiogram for the specified chromosome.}
@@ -7,7 +8,10 @@
 \usage{
 plotIdiogram(chromosome, build, cytoband, cytoband.ycoords, xlim, ylim=c(0, 2),
 new=TRUE, label.cytoband=TRUE, label.y=NULL, srt, cex.axis=1,
-outer=FALSE, taper=0.15, verbose=FALSE, unit=c("bp", "Mb"), is.lattice=FALSE,...)
+outer=FALSE, taper=0.15, verbose=FALSE, unit=c("bp", "Mb"),
+is.lattice=FALSE,...)
+plotCytoband2(chromosome, build, cytoband, xlim, xaxs="r", new=TRUE,
+label.cytoband=TRUE, cex.axis=1, outer=FALSE, verbose=TRUE, ...)
 }
 \arguments{
   \item{chromosome}{character string or integer: which chromosome to draw the
@@ -16,6 +20,7 @@ outer=FALSE, taper=0.15, verbose=FALSE, unit=c("bp", "Mb"), is.lattice=FALSE,...
   \item{cytoband}{data.frame containing cytoband information}
   \item{cytoband.ycoords}{numeric: y coordinates }
   \item{xlim}{x-axis limits}
+  \item{xaxs}{numeric. See \code{par}}
   \item{ylim}{y-axis limits}
   \item{new}{logical: new plotting device}
   \item{label.cytoband}{logical: if TRUE, labels the cytobands}
