@@ -11,15 +11,8 @@ if( require( "RUnit", quietly=TRUE ) ) {
 	cat( "\nRunning unit tests\n" )
 	print( list( pkg=pkg, getwd=getwd(), pathToUnitTests=path ) )
 	library( package=pkg, character.only=TRUE )
-
-	##xmap.clear.cache()
-
 	##  fail on warnings (needed for SNPchip() test)
-	options(warn=2)
-	##  do not fail on warnings (needed for SNPchip() test)
-	## options(warn=0)
-
-	## Get the pattern (if there is one?)
+	##options(warn=2)
 	patt <- Sys.getenv( "RUNITFILEPATTERN" )
 	if( is.null( patt ) || nchar( patt ) == 0 ) {
 		testSuite <- defineTestSuite(name=paste( pkg, "unit testing" ),
