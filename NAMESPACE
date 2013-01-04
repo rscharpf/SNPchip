@@ -1,6 +1,6 @@
 ## methods
 importMethodsFrom(methods, initialize, show)
-importFrom(methods, "@<-", callNextMethod, new, validObject)
+importFrom(methods, callNextMethod, new, validObject)
 
 importFrom(utils, packageDescription)
 
