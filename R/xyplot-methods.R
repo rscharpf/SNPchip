@@ -117,8 +117,23 @@ xyplotLrrBaf <- function(rd, object, frame, ...){
 	}
 	if(any(is.na(position(object)))) stop("NA values not permitted in position(object)")
 	i <- NULL
-	df <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd[i, ],
-			       object=object, frame=frame, range.index=i)
+	if(is(object, "gSet")){
+		df <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd[i, ],
+				       object=object, frame=frame, range.index=i)
+	} else {
+		if(!is(object, "gSetList")) stop("object must extend gSet or gSetList")
+		chr <- unique(chromosome(rd))
+		object <- object[paste("chr", chromosome(object), sep="") %in% chr]
+		dflist <- list()
+		for(i in seq_along(chr)){
+			obj <- object[[i]]
+			rd2 <- rd[chromosome(rd) == paste("chr", chromosome(obj)[1],sep=""),  ]
+			index <- seq_len(length(rd2))
+			dflist[[i]] <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd2[i, ],
+							object=obj, frame=frame, range.index=i)
+		}
+		df <- do.call("rbind", dflist)
+	}
 	df$range <- factor(df$range, ordered=TRUE, levels=unique(df$range))
 	if("cn" %in% colnames(df)){
 		xyplot(cn~x|range, data=df,
@@ -131,3 +146,28 @@ xyplotLrrBaf <- function(rd, object, frame, ...){
 		       is.snp=df$is.snp, range=rd, ...)
 	}
 }
+
+##xyplotLrrBaf <- function(rd, object, frame, ...){
+##	if(is(rd, "GRangesList")) {
+##		rd <- stack(rd)
+##		index <- seq_len(length(rd))
+##	} else {
+##		if(is(rd, "GRanges")) index <- seq_len(length(rd))
+##		if(is(rd, "RangedDataCNV")) index <- seq_len(nrow(rd))
+##	}
+##	if(any(is.na(position(object)))) stop("NA values not permitted in position(object)")
+##	i <- NULL
+##	df <- foreach(i=index, .combine="rbind") %do% dataFrameFromRange(range=rd[i, ],
+##			       object=object, frame=frame, range.index=i)
+##	df$range <- factor(df$range, ordered=TRUE, levels=unique(df$range))
+##	if("cn" %in% colnames(df)){
+##		xyplot(cn~x|range, data=df,
+##		       baf=df$baf,
+##		       is.snp=df$is.snp, range=rd, ...)
+##	} else {
+##		if(!"lrr" %in% colnames(df)) stop("coercion to data.frame must have a 'lrr' column or a 'cn' column, but neither are present")
+##		xyplot(lrr~x|range, data=df,
+##		       baf=df$baf,
+##		       is.snp=df$is.snp, range=rd, ...)
+##	}
+##}
