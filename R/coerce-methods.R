@@ -22,14 +22,10 @@ dataFrameFromRange <- function(range, object, frame=0L, range.index=1L){
 	## coersion to data.frame
 	##
 	df <- as(obj, "data.frame")
-	##df$range <- rep(i, nrow(df))##mm.df$query
-	##dfList[[i]] <- df
-	##df$range <- range.index
-	if(is(range, "RangedDataCNV")){
-		df$range <- paste("[", range.index, "] chr", chromosome(range), ", ID: ", sampleNames(obj), sep="")
-	}
-	if(is(range, "GRanges")){
+	if(!missing(range.index)){
 		df$range <- paste("[", range.index, "] ", chromosome(range), ", ID: ", sampleNames(obj), sep="")
-	}
+	} else df$range <- paste(chromosome(range), ", ID: ", sampleNames(obj), sep="")
 	return(df)
 }
+
+
