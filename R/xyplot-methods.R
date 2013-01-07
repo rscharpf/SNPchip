@@ -171,3 +171,63 @@ xyplotLrrBaf <- function(rd, object, frame, ...){
 ##		       is.snp=df$is.snp, range=rd, ...)
 ##	}
 ##}
+
+latticeFigs <- function(gr, data, ...){
+	intervals <- unique(data$interval)
+	lrr.fig <- xyplot(lrr~x | interval, data=data, pch=20, cex=0.4,
+			  scales=list(x=list(relation="free")),
+			  ylab="log R ratios",
+			  granges=gr,
+			  colors=colors,
+			  ylim=c(-2, 1.5),
+			  panel=function(x,y, granges, colors, ...){
+				  panel.grid(h=3,v=3)
+				  panel.xyplot(x, y, ...)
+				  lrect(xleft=start(granges)/1e6,
+					xright=end(granges)/1e6,
+					ytop=rep(1.5, length(granges)),
+					ybottom=rep(1.3, length(granges)),
+					col=colors,
+					border=colors)
+			  },
+			  xlab="position (Mb)", layout=c(length(intervals), 1))
+	baf.fig <- xyplot(baf~x | interval, data=data, pch=20, cex=0.4,
+			  scales=list(x=list(relation="free")),
+			  ylab="BAFs",
+			  granges=gr,
+			  colors=colors,
+			  ylim=c(0, 1),
+			  panel=function(x,y, granges, colors, ...){
+				  panel.grid(h=3, v=3)
+				  panel.xyplot(x, y, ...)
+			  },
+			  xlab="position (Mb)", layout=c(length(intervals),1))
+	figs <- list(lrr=lrr.fig, baf=baf.fig)
+}
+
+arrangeFigs <- function(lattice.figs, ...){
+	## up to the panel function to plot all ranges
+	##intervals <- unique(data$interval)
+	lrr.fig <- lattice.figs[["lrr"]]
+	baf.fig <- lattice.figs[["baf"]]
+	grid.newpage()
+	trellis.par.set("fontsize", list(text=10))
+	lvp <- viewport(x=0,
+			y=0.5,
+			width=unit(1, "npc"),
+			height=unit(0.5, "npc"), just=c("left", "bottom"),
+			name="lvp")
+	pushViewport(lvp)
+	pushViewport(dataViewport(xscale=c(0,1),
+				  yscale=c(0.05,1), clip="on"))
+	print(lrr.fig, newpage=FALSE, prefix="plot1", more=TRUE)
+	upViewport(0)
+	lvp2 <- viewport(x=0, y=0,
+			 width=unit(1, "npc"),
+			 height=unit(0.5, "npc"),
+			 just=c("left", "bottom"), name="lvp2")
+	pushViewport(lvp2)
+	pushViewport(dataViewport(xscale=c(0,1), yscale=c(0.05,1), clip="on"))
+	print(baf.fig, newpage=FALSE, prefix="plot2", more=FALSE)
+	upViewport(0)
+}

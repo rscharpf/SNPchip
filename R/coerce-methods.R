@@ -1,3 +1,87 @@
+setMethod("dataFrame", signature(range="GRanges", data="gSet"),
+	  function(range, data, ...){
+		  dataFrameFromRange(range=range, object=data, ...)
+	  })
+
+setMethod("dataFrame", signature(range="GRanges", data="SummarizedExperiment"),
+	  function(range, data, ...){
+		  dataFrameSummarizedExperiment(range=range, object=data, ...)
+	  })
+
+setMethod("coerce", signature(from="BafLrrSetList", to="SummarizedExperiment"),
+	  function(from, to){
+		  ##nms <- varLabels(from@featureDataList[[1]])
+		  chrom <- rep(paste("chr", chromosome(from), sep=""),
+			       elementLengths(from))
+		  pos <- unlist(position(from))
+		  is.snp <- unlist(lapply(featureDataList(from), isSnp))
+		  ## stack the featureDataList to make featureData
+		  ## make granges object from featureData
+		  sl <- getSequenceLengths(genomeBuild(from))
+		  sl <- sl[unique(chrom)]
+
+		  seqinfo <- Seqinfo(seqnames=unique(chrom),
+				     genome="hg18")
+		  gr <- GRanges(chrom, IRanges(pos,pos), isSnp=is.snp,
+				seqlengths=sl,
+				seqinfo=seqinfo)
+		  names(gr) <- unlist(featureNames(from))
+		  rlist <- lrr(from)
+		  blist <- baf(from)
+		  isff <- is(rlist[[1]], "ff")
+		  if(isff) require("ff")
+		  ##if(is(rlist[[1]], "ff")
+		  rl <- lapply(rlist, "[", drop=FALSE) ##function(x) x[, ,drop=FALSE])
+		  bl <- lapply(blist, "[", drop=FALSE) ##function(x) x[, ,drop=FALSE])
+		  r <- do.call("rbind", rl)
+		  b <- do.call("rbind", bl)
+		  ##rownames(r) <- rownames(b) <- unlist(featureNames(from))
+		  colData <- DataFrame(pData(from))
+		  rownames(colData) <- sampleNames(from)
+		  se <- SummarizedExperiment(assays=SimpleList(lrr=r, baf=b),
+					     rowData=gr,
+					     colData=colData)
+		  return(se)
+	  })
+
+dataFrameSummarizedExperiment <- function(range, object, ...){
+	range <- range[sampleNames(range) %in% colnames(object), ]
+	tmp <- findOverlaps(range, object, ...)
+	##
+	## by overlapping with self we can avoid plotting same data for ranges that are close together
+	qhits <- queryHits(findOverlaps(range, range, ...))
+	dups <- qhits[duplicated(qhits)]
+	if(length(dups) > 0){
+		dups <- splitIndicesByLength(dups, 2)
+		range2 <- lapply(dups, function(i, x){
+			i1 <- i[1]
+			i2 <- i[2]
+			r <- punion(range[i1, ], range[i2, ], fill.gap=TRUE)
+		}, x=range)
+		range2 <- unlist(GRangesList(range2))
+		names(range2) <- NULL
+		range3 <- GRanges(chromosome(range),
+				  IRanges(start(range),
+					  end(range)))
+		range4 <- c(range2, range3[-unlist(dups), ])
+	} else range4 <- range
+	selist <- foreach(i=seq_along(range4)) %do% subsetByOverlaps(object, range4[i,], ...)
+	x <- unlist(lapply(selist, start))/1e6
+	r <- unlist(lapply(selist, lrr))/100
+	b <- unlist(lapply(selist, baf))/1000
+	is.snp <- unlist(lapply(selist, isSnp))
+	interval <- rep(seq_along(range4), elementLengths(selist))
+	id <- rep(colnames(selist[[1]]), length(x))
+	## an interval may contain multiple CNVs.
+	interval <- paste(chromosome(range4), " interval ", interval, ", ID: ", unique(sampleNames(range), 1,10), sep="")
+	df <- data.frame(x=x, lrr=r, baf=b,
+			 id=id,
+			 is.snp=is.snp,
+			 interval=interval)
+	return(df)
+}
+
+
 dataFrameFromRange <- function(range, object, frame=0L, range.index=1L){
 	## to do: change to S4 method and do dispatch on class of range
 	if(missing(frame)) frame <- 200e3

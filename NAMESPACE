@@ -31,6 +31,6 @@ import(Biobase)
 
 export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide, centromere,
        xyplotLrrBaf, xypanelBaf, plotCytoband2, getCytoband,
-       dataFrameFromRange)
-exportMethods(xyplot, xyplot2)
+       latticeFigs, arrangeFigs)
+exportMethods(xyplot, xyplot2, dataFrame)
 
