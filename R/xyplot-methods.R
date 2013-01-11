@@ -172,15 +172,19 @@ xyplotLrrBaf <- function(rd, object, frame, ...){
 ##	}
 ##}
 
-latticeFigs <- function(gr, data, ...){
+latticeFigs <- function(gr, data, colors, ...){
 	intervals <- unique(data$interval)
-	lrr.fig <- xyplot(lrr~x | interval, data=data, pch=20, cex=0.4,
-			  scales=list(x=list(relation="free")),
+	lrr.fig <- xyplot(lrr~x/1e6 | interval, data=data, ...,
+			  scales=list(x=list(relation="free", axs="i")),
 			  ylab="log R ratios",
 			  granges=gr,
 			  colors=colors,
-			  ylim=c(-2, 1.5),
-			  panel=function(x,y, granges, colors, ...){
+			  ylim=c(-2, 1.6),
+			  id = data$id,
+			  panel=function(x,y, granges, colors, id, ..., subscripts){
+				  id <- id[subscripts[1]]
+				  colors <- colors[sampleNames(granges) == id]
+				  granges <- granges[sampleNames(granges) == id, ]
 				  panel.grid(h=3,v=3)
 				  panel.xyplot(x, y, ...)
 				  lrect(xleft=start(granges)/1e6,
@@ -189,10 +193,12 @@ latticeFigs <- function(gr, data, ...){
 					ybottom=rep(1.3, length(granges)),
 					col=colors,
 					border=colors)
+				  x1 <- current.panel.limits()[[1]]
+				  ltext(x1, 1.5, "HMM track", cex=0.7, adj=0)
 			  },
 			  xlab="position (Mb)", layout=c(length(intervals), 1))
-	baf.fig <- xyplot(baf~x | interval, data=data, pch=20, cex=0.4,
-			  scales=list(x=list(relation="free")),
+	baf.fig <- xyplot(baf~x/1e6 | interval, data=data, ...,
+			  scales=list(x=list(relation="free", axs="i")),
 			  ylab="BAFs",
 			  granges=gr,
 			  colors=colors,

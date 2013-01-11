@@ -46,34 +46,23 @@ setMethod("coerce", signature(from="BafLrrSetList", to="SummarizedExperiment"),
 
 dataFrameSummarizedExperiment <- function(range, object, ...){
 	range <- range[sampleNames(range) %in% colnames(object), ]
-	tmp <- findOverlaps(range, object, ...)
-	##
-	## by overlapping with self we can avoid plotting same data for ranges that are close together
-	qhits <- queryHits(findOverlaps(range, range, ...))
-	dups <- qhits[duplicated(qhits)]
-	if(length(dups) > 0){
-		dups <- splitIndicesByLength(dups, 2)
-		range2 <- lapply(dups, function(i, x){
-			i1 <- i[1]
-			i2 <- i[2]
-			r <- punion(range[i1, ], range[i2, ], fill.gap=TRUE)
-		}, x=range)
-		range2 <- unlist(GRangesList(range2))
-		names(range2) <- NULL
-		range3 <- GRanges(chromosome(range),
-				  IRanges(start(range),
-					  end(range)))
-		range4 <- c(range2, range3[-unlist(dups), ])
-	} else range4 <- range
-	selist <- foreach(i=seq_along(range4)) %do% subsetByOverlaps(object, range4[i,], ...)
-	x <- unlist(lapply(selist, start))/1e6
+	grl <- split(range, sampleNames(range))
+	if("maxgap" %in% names(list(...))){
+		min.gapwidth <- list(...)[["maxgap"]]
+		grl2 <- reduce(grl, min.gapwidth=min.gapwidth)
+	} else grl2 <- reduce(grl)
+	col.index <- match(names(grl2), colnames(object))
+	selist <- foreach(gr=grl2, j=col.index) %do% subsetByOverlaps(object[, j], gr, ...)
+	x <- unlist(lapply(selist, start))
 	r <- unlist(lapply(selist, lrr))/100
 	b <- unlist(lapply(selist, baf))/1000
 	is.snp <- unlist(lapply(selist, isSnp))
-	interval <- rep(seq_along(range4), elementLengths(selist))
-	id <- rep(colnames(selist[[1]]), length(x))
+	gr <- unlist(grl2)
+	interval <- rep(seq_along(gr), elementLengths(selist))
+	chrom <- rep(chromosome(gr), elementLengths(selist))
+	id <- rep(names(gr), elementLengths(selist))
 	## an interval may contain multiple CNVs.
-	interval <- paste(chromosome(range4), " interval ", interval, ", ID: ", unique(sampleNames(range), 1,10), sep="")
+	interval <- paste(chromosome(gr), " interval ", interval, ", ID: ", id, sep="")
 	df <- data.frame(x=x, lrr=r, baf=b,
 			 id=id,
 			 is.snp=is.snp,
