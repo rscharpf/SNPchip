@@ -49,34 +49,34 @@ setMethod("xyplot2", signature(x="formula",
 		  .xyplot2(x=x, data=data, range=range, frame=frame, ...)
 	  })
 
-setMethod("xyplot2", signature(x="formula", data="CNSet", range="RangedDataCNV"),
-	  function(x, data, range, frame=50e3L, ...){
-		  if(is(range, "RangedDataCNV"))
-			  z <- findOverlaps(range, data, maxgap=frame)
-		  if(is(range, "GRanges")){
-			  frange <- oligoClasses:::makeFeatureGRanges(object)
-			  z <- findOverlaps(range, frange)
-		  }
-		  mm <- as.matrix(z)
-		  mm.df <- data.frame(mm)
-		  mm.df$featureNames <- featureNames(data)[mm.df$subject]
-		  marker.index <- unique(mm.df$subject)
-		  ##marker.index <- featuresInRange(data, rd, FRAME=frame)
-		  sample.index <- match(unique(sampleNames(range)), sampleNames(data))
-		  data <- data[marker.index, sample.index]
-		  ## now we need to know the indices of
-		  ## each range after subsetting
-		  ## mm.df$subject <- match(mm.df$featureNames, featureNames(data))
-		  ## we assume that each range is from a different sample
-		  oligoset <- as(data, "oligoSnpSet")
-		  df <- as(oligoset, "data.frame")
-		  df$range.index <- mm.df$query
-		  xyplot(x, df,
-			 range=range,
-			 gt=df$gt,
-			 is.snp=df$is.snp,
-			 ...)
-	  })
+##setMethod("xyplot2", signature(x="formula", data="CNSet", range="RangedDataCNV"),
+##	  function(x, data, range, frame=50e3L, ...){
+##		  if(is(range, "RangedDataCNV"))
+##			  z <- findOverlaps(range, data, maxgap=frame)
+##		  if(is(range, "GRanges")){
+##			  frange <- oligoClasses:::makeFeatureGRanges(object)
+##			  z <- findOverlaps(range, frange)
+##		  }
+##		  mm <- as.matrix(z)
+##		  mm.df <- data.frame(mm)
+##		  mm.df$featureNames <- featureNames(data)[mm.df$subject]
+##		  marker.index <- unique(mm.df$subject)
+##		  ##marker.index <- featuresInRange(data, rd, FRAME=frame)
+##		  sample.index <- match(unique(sampleNames(range)), sampleNames(data))
+##		  data <- data[marker.index, sample.index]
+##		  ## now we need to know the indices of
+##		  ## each range after subsetting
+##		  ## mm.df$subject <- match(mm.df$featureNames, featureNames(data))
+##		  ## we assume that each range is from a different sample
+##		  oligoset <- as(data, "oligoSnpSet")
+##		  df <- as(oligoset, "data.frame")
+##		  df$range.index <- mm.df$query
+##		  xyplot(x, df,
+##			 range=range,
+##			 gt=df$gt,
+##			 is.snp=df$is.snp,
+##			 ...)
+##	  })
 
 setMethod("xyplot", signature(x="formula", data="BeadStudioSet"),
 	  function(x, data, ...){
@@ -174,10 +174,10 @@ xyplotLrrBaf <- function(rd, object, frame, ...){
 
 latticeFigs <- function(gr, data, colors, ...){
 	intervals <- unique(data$interval)
-	lrr.fig <- xyplot(lrr~x/1e6 | interval, data=data, ...,
-			  scales=list(x=list(relation="free", axs="i")),
+	lrr.fig <- xyplot(lrr~x/1e6 | interval, data, ...,
 			  ylab="log R ratios",
 			  granges=gr,
+			  scales=list(x=list(relation="free", axs="i")),
 			  colors=colors,
 			  ylim=c(-2, 1.6),
 			  id = data$id,

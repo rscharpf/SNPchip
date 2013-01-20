@@ -8,6 +8,8 @@ setMethod("dataFrame", signature(range="GRanges", data="SummarizedExperiment"),
 		  dataFrameSummarizedExperiment(range=range, object=data, ...)
 	  })
 
+
+
 setMethod("coerce", signature(from="BafLrrSetList", to="SummarizedExperiment"),
 	  function(from, to){
 		  ##nms <- varLabels(from@featureDataList[[1]])
@@ -69,7 +71,6 @@ dataFrameSummarizedExperiment <- function(range, object, ...){
 			 interval=interval)
 	return(df)
 }
-
 
 dataFrameFromRange <- function(range, object, frame=0L, range.index=1L){
 	## to do: change to S4 method and do dispatch on class of range
