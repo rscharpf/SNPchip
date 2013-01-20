@@ -47,12 +47,11 @@ library(crlmm)
 library(GenomicRanges)
 library(VanillaICE)
 data(cnSetExample, package="crlmm")
-oligoSetList <- constructOligoSetListFrom(cnSetExample)
-fit <- hmm(oligoSetList, p.hom=0)
+oligoSetList <- BafLrrSetList(cnSetExample)
+fit <- hmm(oligoSetList, p.hom=0)[[1]]
+rd <- fit[sampleNames(fit)=="NA19007", ]
 ## We're interested in this range
 range <- GRanges("chr8", IRanges(3.7e6, 5.9e6), sample="NA19007")
-rd <- fit[["NA19007"]]
-elementMetadata(rd)$sample <- "NA19007"
 index <- subjectHits(findOverlaps(range, rd))
 xyplotLrrBaf(rd[index, ], oligoSetList[[1]], frame=1e6,
 	     panel=xypanelBaf, cex=0.2,

@@ -1,12 +1,12 @@
 Package: SNPchip
-Version: 2.5.1
+Version: 2.5.8
 Title: Visualizations for copy number alterations
 Author: Robert Scharpf <rscharpf@jhsph.edu> and Ingo Ruczinski
 Maintainer: Robert Scharpf <rscharpf@jhsph.edu>
 Depends: R (>= 2.14.0)
-Imports: graphics, lattice, grid, foreach, utils, methods, oligoClasses (>= 1.19.30), Biobase, GenomicRanges
-Suggests: crlmm, IRanges, RUnit
-Enhances: doSNOW, VanillaICE, RColorBrewer
+Imports: graphics, lattice, grid, foreach, utils, methods, oligoClasses (>= 1.21.12), Biobase, GenomicRanges
+Suggests: crlmm (>= 1.17.14), IRanges, RUnit
+Enhances: doSNOW, VanillaICE (>= 1.21.24), RColorBrewer
 Description: This package defines methods for visualizing high-throughput genomic data
 License: LGPL (>= 2)
 LazyLoad: yes

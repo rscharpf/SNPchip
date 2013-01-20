@@ -3,7 +3,6 @@
 \alias{xyplot2}
 \alias{xyplot,formula,gSet-method}
 \alias{xyplot,formula,BeadStudioSet-method}
-\alias{xyplot2,formula,CNSet,RangedDataCNV-method}
 \alias{xyplot2,formula,gSet,ANY-method}
 \alias{xyplot2,formula,SnpSet,ANY-method}
 \title{Plot copy number and physical position for a set of genomic intervals.}
@@ -31,27 +30,12 @@ xyplot2(x, data, range, frame=50e3L, ...)
 \details{
 
 
-  For a given \code{RangedDataCNV} object, this function will plot the
-  copy number estimates versus physical position. The function is
-  particularly useful for multi-panel displays in which the copy number
-  estimates for a single range of the \code{RangedDataCNV} object
-  appears in one panel. The size of the multi-panel display depends on
-  the number of ranges (rows) in the \code{RangedDataCNV} object.
-  Typically, one would want to pass no more than 10 ranges to the
-  \code{xyplot} function.
-
-  For genomic intervals of interest in the \code{RangedDataCNV}, it is
-  often helpful to 'frame' the interval by plotting the data surrounding
-  the interval. To facilitate this process, one may pass an argument
-  called \code{frame} (an integer) that indicates the number of
-  basepairs to the left and right of the start / stop points in the
-  interval.  By default, the first interval in the \code{RangedDataCNV}
-  object will be plotted in the lower left panel and the last interval
-  \code{RangedDataCNV} object will be plotted in the upper right panel.
-  Overplotting the copy number data in each panel is a rectangle that
-  indicates the start and stop coordinates in the \code{RangedDataCNV}
-  object.
-
+  These functions plot copy number estimates versus physical
+  position. The function is particularly useful for multi-panel displays
+  in which the copy number estimates for a single range of a
+  \code{GRanges} object appears in one panel. The size of the
+  multi-panel display depends on the number of ranges (rows) in the
+  \code{GRanges} object.
 
 }
 
@@ -61,24 +45,6 @@ xyplot2(x, data, range, frame=50e3L, ...)
 
 }
 
-\note{
-
-  Note that users must pass a \code{RangedDataCNV} object called
-  'range'.  As mentioned previously, it can be helpful to pass an
-  integer called 'frame' that indicates how much contextual data we
-  should plot surrounding each genomic interval. In future iterations,
-  \code{RangedDataCNV} will likely be deprecated in favor of
-  \code{GRanges}.
-
-
-  If the \code{lattice} package is loaded after loading
-  \code{VanillaICE}, the generic definition for \code{xyplot} in
-  \code{VanillaICE} will be masked. To unmask the S4 generic in
-  \code{VanillaICE}, do
-
-  xyplot <- VanillaICE:::xyplot
-
-}
 \author{
 R. Scharpf
 }
