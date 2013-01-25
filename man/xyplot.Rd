@@ -1,17 +1,17 @@
 \name{xyplot}
-\alias{xyplot}
+%\alias{xyplot}
 \alias{xyplot2}
-\alias{xyplot,formula,gSet-method}
-\alias{xyplot,formula,BeadStudioSet-method}
-\alias{xyplot2,formula,gSet,ANY-method}
-\alias{xyplot2,formula,SnpSet,ANY-method}
+%\alias{xyplot,formula,gSet-method}
+%\alias{xyplot,formula,BeadStudioSet-method}
+\alias{xyplot2,formula,gSet-method}
+\alias{xyplot2,formula,SnpSet-method}
 \title{Plot copy number and physical position for a set of genomic intervals.}
 \description{Plot copy number and physical position given by a
   \code{CNSet} object for a set of genomic intervals stored in a
   \code{RangedDataCVN} object.
 }
 \usage{
-xyplot(x, data, ...)
+%xyplot(x, data, ...)
 xyplot2(x, data, range, frame=50e3L, ...)
 }
 \arguments{
@@ -70,7 +70,7 @@ R. Scharpf
 	## (here the frames are overlapping, but the method could be
 	## applied more generally to a collection of ranges from
 	## different chromsomes and samples)
-	xyplot(cn~x | range, data=oligoSet,
+	xyplot2(cn~x | range, data=oligoSet,
 	       range=hmmResults,
 	       frame=2e6, panel=xypanel,
 	       cex=2,

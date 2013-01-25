@@ -17,14 +17,14 @@ test_xyplot <- function(){
 	library(VanillaICE)
 	data(oligoSetExample, package="oligoClasses")
 	data(hmmResults, package="VanillaICE")
-	fig <- xyplot(cn~x | range, data=oligoSet,
-		      range=hmmResults,
-		      frame=2e6, panel=xypanel,
-		      cex=2,
-		      pch=".",
-		      col.het="salmon",
-		      fill.het="salmon",
-		      col.hom="royalblue",
+	fig <- xyplot2(cn~x | range, data=oligoSet,
+		       range=hmmResults,
+		       frame=2e6, panel=xypanel,
+		       cex=2,
+		       pch=".",
+		       col.het="salmon",
+		       fill.het="salmon",
+		       col.hom="royalblue",
 		      fill.hom="royalblue",
 		      state.cex=0.5,
 		      border="orange", scales=list(x="free"),
