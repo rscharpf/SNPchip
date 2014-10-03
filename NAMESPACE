@@ -16,6 +16,10 @@ import(lattice)
 ## foreach
 import(foreach)
 
+import(GenomeInfoDb)
+import(graphics)
+import(IRanges)
+
 ## IRanges
 ##import(IRanges)
 ##importMethodsFrom(IRanges, as.matrix, findOverlaps)
@@ -32,4 +36,3 @@ export(plotCytoband, plotIdiogram, xypanel, arrangeSideBySide, centromere,
        xyplotLrrBaf, xypanelBaf, plotCytoband2, getCytoband,
        latticeFigs, arrangeFigs)
 exportMethods(dataFrame, xyplot2)
-

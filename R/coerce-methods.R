@@ -54,6 +54,8 @@ dataFrameSummarizedExperiment <- function(range, object, ...){
 		grl2 <- reduce(grl, min.gapwidth=min.gapwidth)
 	} else grl2 <- reduce(grl)
 	col.index <- match(names(grl2), colnames(object))
+        j <- NULL
+        gr <- NULL
 	selist <- foreach(gr=grl2, j=col.index) %do% subsetByOverlaps(object[, j], gr, ...)
 	x <- unlist(lapply(selist, start))
 	r <- unlist(lapply(selist, lrr))/100
@@ -101,5 +103,3 @@ dataFrameFromRange <- function(range, object, frame=0L, range.index=1L){
 	} else df$range <- paste(chromosome(range), ", ID: ", sampleNames(obj), sep="")
 	return(df)
 }
-
-

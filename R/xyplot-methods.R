@@ -20,7 +20,7 @@
 ##		}
 	}
 	if("gt" %in% colnames(df)){
-		lattice:::xyplot(x, df,
+		lattice::xyplot(x, df,
 				range=range,
 				id=df$id,
 				gt=df$gt,

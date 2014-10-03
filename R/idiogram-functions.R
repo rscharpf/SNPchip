@@ -235,7 +235,7 @@ plotIdiogram <- function(chromosome,
 			segments(start+delta, cytoband.ycoords[1], start+delta, cytoband.ycoords[2])
 			segments(last-delta, cytoband.ycoords[1], last-delta, cytoband.ycoords[2])
 		} else if (cut.left[i] & cut.right[i]) {      # cut both lasts
-			##Taper both ends
+                  ##Taper both ends
 			yy <- c(bot + p*h, bot, bot, bot + p*h, top - p*h, top, top, top - p*h)
 			polygon(c(start, start+delta, last-delta, last, last, last-delta, start+delta, start),
 				yy, col=color)

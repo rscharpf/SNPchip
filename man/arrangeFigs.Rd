@@ -32,9 +32,7 @@ R. Scharpf
 \seealso{
   \code{latticeFigs}, \code{\link{arrangeSideBySide}}
 }
-\examples{
-}
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{hplot}
-

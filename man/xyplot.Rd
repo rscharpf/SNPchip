@@ -59,19 +59,25 @@ R. Scharpf
 
 }
 \examples{
-	## simulated data
-	library(oligoClasses)
-	library(IRanges)
-	library(VanillaICE)
-	data(oligoSetExample, package="oligoClasses")
-	data(hmmResults, package="VanillaICE")
-	## to visualize each range in it's own panel surrounded by a
-	## frame of 2,000,000 bases:
-	## (here the frames are overlapping, but the method could be
-	## applied more generally to a collection of ranges from
-	## different chromsomes and samples)
-	xyplot2(cn~x | range, data=oligoSet,
-	       range=hmmResults,
+  ## simulated data
+  library(oligoClasses)
+  library(IRanges)
+  library(VanillaICE)
+  data(oligoSetExample, package="oligoClasses")
+  ## The oligoSnpSet class will likely be deprecated and made defunct
+  ## in a future release.  Instead, we favor
+  ## SummarizedExperiment-derived classes defined in VanillaICE
+  oligoSet <- oligoSet[chromosome(oligoSet) == 1, ]
+  grl <- hmm(oligoSet, p.hom=0, TAUP=1e10, is.log=FALSE)
+  g <- grl[[1]]
+
+  ## To visualize each range in it's own panel surrounded by a
+  ## frame of 2,000,000 bases:
+  ## (here the frames are overlapping, but the method could be
+  ## applied more generally to a collection of ranges from
+  ## different chromsomes and samples)
+  xyplot2(cn~x | range, data=oligoSet,
+	       range=g,
 	       frame=2e6, panel=xypanel,
 	       cex=2,
 	       pch=".",
@@ -86,4 +92,3 @@ R. Scharpf
 }
 \keyword{dplot}
 \keyword{methods}
-

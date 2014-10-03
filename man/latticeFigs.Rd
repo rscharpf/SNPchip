@@ -24,9 +24,7 @@ latticeFigs(gr, data, colors, ...)
     Additional arguments to \code{panel.xyplot}
 }
 }
-\details{
 
-}
 \value{
   A list (length 2) of trellis objects with names 'lrr' and 'baf'.
 }
@@ -34,10 +32,6 @@ latticeFigs(gr, data, colors, ...)
 \author{
 R. Scharpf
 }
-\seealso{
-}
-\examples{
-}
+
 
 \keyword{dplot}
-
