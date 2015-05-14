@@ -3,14 +3,14 @@ setMethod("dataFrame", signature(range="GRanges", data="gSet"),
 		  dataFrameFromRange(range=range, object=data, ...)
 	  })
 
-setMethod("dataFrame", signature(range="GRanges", data="SummarizedExperiment"),
+setMethod("dataFrame", signature(range="GRanges", data="RangedSummarizedExperiment"),
 	  function(range, data, ...){
 		  dataFrameSummarizedExperiment(range=range, object=data, ...)
 	  })
 
 
 
-setMethod("coerce", signature(from="BafLrrSetList", to="SummarizedExperiment"),
+setMethod("coerce", signature(from="BafLrrSetList", to="RangedSummarizedExperiment"),
 	  function(from, to){
 		  ##nms <- varLabels(from@featureDataList[[1]])
 		  chrom <- rep(paste("chr", chromosome(from), sep=""),

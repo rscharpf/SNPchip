@@ -15,7 +15,7 @@ latticeFigs(gr, data, colors, ...)
     A \code{GRanges} object
 }
   \item{data}{
-    A \code{SummarizedExperiment} with assays "lrr" and "baf"
+    A \code{RangedSummarizedExperiment} with assays "lrr" and "baf"
 }
   \item{colors}{
     Colors for copy number states

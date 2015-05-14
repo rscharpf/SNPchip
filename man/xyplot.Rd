@@ -66,7 +66,7 @@ R. Scharpf
   data(oligoSetExample, package="oligoClasses")
   ## The oligoSnpSet class will likely be deprecated and made defunct
   ## in a future release.  Instead, we favor
-  ## SummarizedExperiment-derived classes defined in VanillaICE
+  ## RangedSummarizedExperiment-derived classes defined in VanillaICE
   oligoSet <- oligoSet[chromosome(oligoSet) == 1, ]
   grl <- hmm(oligoSet, p.hom=0, TAUP=1e10, is.log=FALSE)
   g <- grl[[1]]

@@ -44,7 +44,7 @@ R. Scharpf
 }
 \examples{
 library(crlmm)
-library(GenomicRanges)
+library(SummarizedExperiment)
 library(VanillaICE)
 data(cnSetExample, package="crlmm")
 oligoSetList <- BafLrrSetList(cnSetExample)

@@ -22,7 +22,7 @@ dataFrame(range, data, ...)
 }
 
   \item{data}{ A container for the low-level data (e.g.,
-    \code{BafLrrSet}) or a \code{SummarizedExperiment} }
+    \code{BafLrrSet}) or a \code{RangedSummarizedExperiment} }
 
   \item{\dots}{
     Additional arguments passed to \code{findOverlaps}. E.g., argument

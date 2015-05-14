@@ -23,7 +23,10 @@ import(IRanges)
 ## IRanges
 ##import(IRanges)
 ##importMethodsFrom(IRanges, as.matrix, findOverlaps)
+
 import(GenomicRanges)
+
+import(SummarizedExperiment)
 
 ## oligoClasses
 import(oligoClasses)
