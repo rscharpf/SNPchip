@@ -41,7 +41,7 @@ setMethod("coerce", signature(from="BafLrrSetList", to="RangedSummarizedExperime
 		  colData <- DataFrame(pData(from))
 		  rownames(colData) <- sampleNames(from)
 		  se <- SummarizedExperiment(assays=SimpleList(lrr=r, baf=b),
-					     rowData=gr,
+					     rowRanges=gr,
 					     colData=colData)
 		  return(se)
 	  })
